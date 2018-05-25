@@ -28,13 +28,13 @@ while True:
 	for car in road2:
 		canvas.move(road2[car], 0, 4)
 		
-	if clock % (rnd.randint(1, 10) + 8) == 0:
+	if master_clock % (rnd.randint(1, 10) + 8) == 0:
 		# generate a car on road1
 		car = 'car' + str(number_of_car_on_raod1)
 		road1[car] = canvas.create_rectangle(0, 196, 4, 200, fill='white')
 		number_of_car_on_raod1 += 1
 		
-	if clock % (rnd.randint(1, 10) + 5) == 0:
+	if master_clock % (rnd.randint(1, 10) + 5) == 0:
 		# generate a car on road2
 		car = 'car' + str(number_of_car_on_raod2)
 		road2[car] = canvas.create_rectangle(200, 0, 204, 4, fill='white')
