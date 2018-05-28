@@ -1,6 +1,8 @@
 from tkinter import *
 import time
 import random as rnd
+import pandas as pd
+import numpy as np
 
 root = Tk()
 # every 4px is a unit
@@ -96,3 +98,18 @@ while master_clock <= 1000:
 	time.sleep(0.1)
 
 root.mainloop()
+
+
+#time%(rnd.nextInt(10)+5)==0
+#
+#State = 
+#closest car position from intersection for road 1 (0-8, 9 if no cars) X
+#closest car position from intersection for road 2 (0-8, 9 if no cars X
+#light setting (ie 0-green, 1 red for one of the roads) X
+#light delay (0-3)
+#
+#Reward -1.0 if a car is stopped at a red light on either road, zero otherwise.
+#Optimise discounted sum of future reward.
+
+
+	
