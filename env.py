@@ -111,16 +111,18 @@ while master_clock <= 1000:
 		light_delay = -1
 		if light_setting == 0:
 			light_setting = 1
+			block_list1 = [196]
 			light1 = canvas.create_rectangle(192, 196, 196, 200, fill='red2')
 			light2 = canvas.create_rectangle(200, 192, 204, 196, fill='spring green')
 		else:
 			light_setting = 0
+			block_list2 = [196]
 			light1 = canvas.create_rectangle(192, 196, 196, 200, fill='spring green')
 			light2 = canvas.create_rectangle(200, 192, 204, 196, fill='red2')
 	
 	if light_setting == 0:
 		for car in road1:
-			block_list1 = [196]
+			
 			canvas.move(car[1], 4, 0)
 		for car in reversed(road2):
 			position = canvas.coords(car[1])[1]
@@ -135,7 +137,6 @@ while master_clock <= 1000:
 					canvas.move(car[1], 0, 4)
 	else:
 		for car in road2:
-			block_list2 = [196]
 			canvas.move(car[1], 0, 4)
 		for car in reversed(road1):
 			position = canvas.coords(car[1])[0]
@@ -172,12 +173,11 @@ while master_clock <= 1000:
 	
 	light_delay += 1
 	master_clock += 1
-	time.sleep(0.1)
+	time.sleep(0.2)
 
 root.mainloop()
 
 
-#time%(rnd.nextInt(10)+5)==0
 #
 #State = 
 #closest car position from intersection for road 1 (0-8, 9 if no cars) X
