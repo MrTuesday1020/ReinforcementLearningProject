@@ -1,8 +1,7 @@
 from tkinter import *
 import time
 import random as rnd
-import pandas as pd
-import numpy as np
+import qlearning as ql
 
 root = Tk()
 # every 4px is a unit
@@ -34,7 +33,79 @@ change_time = 10
 block_list1 = [196]
 block_list2 = [196]
 
+observation = [closest_car_position_of_road1, closest_car_position_of_road2, light_setting, light_delay]
+
+def closest_car(car_position,action,light_setting, closest_car_position_of_road,next_car_position):
+	if car_position == 9:
+		if closest_car_position_of_road > 9:
+			car_position = car_position
+		elif closest_car_position_of_road == 9:
+			car_position -= 1
+	elif car_position > 0:
+		car_position -= 1
+	elif car_position == 0:
+		if action == 'switch':
+			if light_setting == 1:	# red -> green
+				car_position = next_car_position - 1
+			else:	# green -> red
+				car_position = car_position
+		else:
+			if light_setting == 1:	# red -> red
+				car_position = car_position
+			else:	# green -> green
+				car_position = next_car_position - 1
+				
+	return car_position
+
+def update_state(action, observation, road1, road2):
+	for car in reversed(road1):
+		position1 = canvas.coords(car[1])[0]
+		if position1 < 196:
+			closest_car_position_of_road1 = int((196 - position1) / 4)
+			temp = road1.index(car)
+			if temp != 0:
+				position2 = canvas.coords(road1[temp-1][1])[0]
+				next_car_position1 = int((196 - position2) / 4)
+			else:
+				next_car_position1 = 10
+	
+	for car in reversed(road2):
+		position1 = canvas.coords(car[1])[1]
+		if position1 < 196:
+			closest_car_position_of_road2 = int((196 - position1) / 4)
+			temp = road1.index(car)
+			if temp != 0:
+				position2 = canvas.coords(road1[temp-1][1])[0]
+				next_car_position2 = int((196 - position2) / 4)
+			else:
+				next_car_position2 = 10
+	
+	closest_car_position_of_road1 = closest_car(observation[0], action, light_setting, closest_car_position_of_road1, next_car_position1)
+	closest_car_position_of_road2 = closest_car(observation[1], action, light_setting, closest_car_position_of_road2, next_car_position2)
+ 	
+	if action == 'switch':
+		if observation[2] == 0:
+			light_setting = 1
+		else:
+			light_setting = 0
+		
+		light_delay = 0
+	else:
+		light_setting = observation[2]
+		
+		if observation[3] != 3:
+			light_delay = observation[3] + 1
+		else:
+			light_delay = observation[3]
+		
+
 while master_clock <= 1000:
+	
+#	if light_delay <= 2:
+#		action = 'no_switch'
+#	else:
+#		action = RL.choose_action(str(observation))
+	
 	# chaneg light setting
 	if light_delay >= change_time:
 		light_delay = -1
@@ -58,7 +129,7 @@ while master_clock <= 1000:
 				# move down a unit
 				canvas.move(car[1], 0, 4)
 			else:
-				if (position + 4) in block_list1:
+				if (position + 4) in block_list2:
 					block_list2.append(position)
 				else:
 					canvas.move(car[1], 0, 4)
@@ -78,7 +149,7 @@ while master_clock <= 1000:
 				else:
 					canvas.move(car[1], 4, 0)
 
-	if master_clock % (rnd.randint(1, 10) + 5) == 0:
+	if master_clock % (rnd.randint(1, 8)) == 0:
 		if rnd.random() > 0.5:
 			# generate a car on road1
 			car_name = 'car' + str(number_of_car_on_raod1)
@@ -93,6 +164,12 @@ while master_clock <= 1000:
 			number_of_car_on_raod2 += 1
 	
 	root.update()
+	
+	# next state
+	
+	#observation_, reward = update_state(action,observation)
+	
+	
 	light_delay += 1
 	master_clock += 1
 	time.sleep(0.1)

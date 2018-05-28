@@ -24,10 +24,7 @@ class QLearningTable:
 	def learn(self, s, a, r, s_):
 		self.check_state_exist(s_)
 		q_predict = self.q_table.loc[s,a]
-		if s_ != 'terminal':
-			q_target = r + self.gamma * self.q_table.loc[s_,:].max()
-		else:
-			q_target = r
+		q_target = r + self.gamma * self.q_table.loc[s_,:].max()
 		self.q_table.loc[s, a] += self.alpha * (q_target - q_predict)
 
 	def check_state_exist(self, state):
