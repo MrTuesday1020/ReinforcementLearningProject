@@ -53,9 +53,9 @@ closest_car_position_of_road2 = min(closest_car_position_of_road_21,closest_car_
 length_of_experiment = 1000
 replicaiton_of_experiment = 100
 
-sum_of_reward = 0
+sum_of_stop_cars = 0
 index_of_this_experiment = 0
-reward_list = []
+performance_measure = []
 
 observation = str(closest_car_position_of_road1)+str(closest_car_position_of_road2)+str(light_setting)+str(light_delay)
 
@@ -63,7 +63,6 @@ observation = str(closest_car_position_of_road1)+str(closest_car_position_of_roa
 observation = str(closest_car_position_of_road1)+str(closest_car_position_of_road2)+str(light_setting)+str(light_delay)
 
 RL = ql.QLearningTable()
-#last_switch_time = master_clock
 
 
 ########################################### update observation ###########################################
@@ -249,10 +248,6 @@ while master_clock <= length_of_experiment * replicaiton_of_experiment:
 		RL.check_state_exist(observation)
 	else:
 		action = RL.choose_action(observation)
-		
-#	if action == 'switch':
-#		print(master_clock-last_switch_time)
-#		last_switch_time = master_clock
 	
 	# chaneg light setting
 	if amber_light != 0:
@@ -342,16 +337,21 @@ while master_clock <= length_of_experiment * replicaiton_of_experiment:
 	# next state
 	observation_ = update_state(action, observation, road_11, road_21, road_12, road_22)
 	
-	# coompute current reward
-	# Reward -1.0 if a car is stopped at a red light on either road, zero otherwise.
-	reward = - len(block_list_11) - len(block_list_12)- len(block_list_21) - len(block_list_22) + 4
 	
-	sum_of_reward += reward
+	# Reward -1.0 if a car is stopped at a red light on either road, zero otherwise.
+	if len(block_list_11) > 1 or len(block_list_12) > 1 or len(block_list_21) > 1 or len(block_list_22) > 1:
+		reward = -1
+	else:
+		reward = 0
+	
+	# coompute the amount of stop cars
+	stop_cars = - len(block_list_11) - len(block_list_12)- len(block_list_21) - len(block_list_22) + 4
+	sum_of_stop_cars += stop_cars
 	index_of_this_experiment += 1
 	if index_of_this_experiment == length_of_experiment:
-		print(sum_of_reward)
-		reward_list.append(sum_of_reward)
-		sum_of_reward = 0
+		print(sum_of_stop_cars)
+		performance_measure.append(sum_of_stop_cars)
+		sum_of_stop_cars = 0
 		index_of_this_experiment = 0
 	
 	# learning
@@ -360,10 +360,9 @@ while master_clock <= length_of_experiment * replicaiton_of_experiment:
 	observation = observation_
 	light_delay += 1
 	master_clock += 1
-	time.sleep(0.2)
 
-with open('reward', 'w') as f:
-	f.write(str(reward_list))
+with open('performance_measure', 'w') as f:
+	f.write(str(performance_measure))
 
 RL.print_table()
 
