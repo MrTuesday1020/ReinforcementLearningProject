@@ -272,7 +272,6 @@ while master_clock <= length_of_experiment * replicaiton_of_experiment:
 	observation = observation_
 	light_delay += 1
 	master_clock += 1
-	time.sleep(0.1)
 
 with open('reward', 'w') as f:
 	f.write(str(reward_list))
