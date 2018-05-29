@@ -14,7 +14,7 @@ canvas.pack()
 canvas.create_rectangle(0*unit, 49*unit, 100*unit, 51*unit, fill='black')
 # the vertical road
 canvas.create_rectangle(49*unit, 0*unit, 51*unit, 100*unit, fill='black')
-# cars and lights are 4px*4px squares
+# cars and lights are 8px*8px squares
 light1 = canvas.create_rectangle(48*unit, 49*unit, 49*unit, 50*unit, fill='spring green')
 light2 = canvas.create_rectangle(50*unit, 48*unit, 51*unit, 49*unit, fill='red2')
 
@@ -112,7 +112,10 @@ def update_state(action, observation, road1, road2):
 RL = ql.QLearningTable()
 #last_switch_time = master_clock
 
-while master_clock <= 1000:
+sum_of_reward = 0
+count = 0
+
+while master_clock <= 1000 * 100:
 	
 	if light_delay <= 2:
 		action = 'no_switch'
@@ -168,7 +171,7 @@ while master_clock <= 1000:
 				else:
 					canvas.move(car[1], unit, 0)
 
-	if master_clock % (rnd.randint(1, 8)) == 0:
+	if master_clock % (rnd.randint(1, 10) + 5) == 0:
 		if rnd.random() > 0.5:
 			# generate a car on road1
 			car_name = 'car' + str(number_of_car_on_raod1)
@@ -190,14 +193,23 @@ while master_clock <= 1000:
 	
 	reward = - len(block_list1) - len(block_list2) + 2
 	
+	sum_of_reward += reward
+	count += 1
+	if count == 1000:
+		print(sum_of_reward)
+		sum_of_reward = 0
+		count = 0
+	
+	
 	RL.learn(observation, action, reward, observation_)
 	
 	observation = observation_
 	
 	light_delay += 1
 	master_clock += 1
-	time.sleep(0.2)
 
+
+RL.print_table()
 
 root.mainloop()
 
