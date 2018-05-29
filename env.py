@@ -37,6 +37,7 @@ block_list2 = [49*unit]
 
 observation = str(closest_car_position_of_road1)+str(closest_car_position_of_road2)+str(light_setting)+str(light_delay)
 
+
 def closest_car(car_position, action, light_setting, clst_car_position_of_road, next_car_position):
 	if car_position == 9:
 		if clst_car_position_of_road > 9:
@@ -109,6 +110,7 @@ def update_state(action, observation, road1, road2):
 	return observation
 
 RL = ql.QLearningTable()
+#last_switch_time = master_clock
 
 while master_clock <= 1000:
 	
@@ -117,6 +119,10 @@ while master_clock <= 1000:
 		RL.check_state_exist(observation)
 	else:
 		action = RL.choose_action(observation)
+		
+#	if action == 'switch':
+#		print(master_clock-last_switch_time)
+#		last_switch_time = master_clock
 	
 	# chaneg light setting
 	if action == 'switch':
@@ -124,13 +130,13 @@ while master_clock <= 1000:
 		if light_setting == 0:
 			light_setting = 1
 			block_list1 = [49*unit]
-			light1 = canvas.create_rectangle(48*unit, 49*unit, 49*unit, 50*unit, fill='red2')
-			light2 = canvas.create_rectangle(50*unit, 48*unit, 51*unit, 49*unit, fill='spring green')
+			canvas.itemconfig(light1, fill='red2')
+			canvas.itemconfig(light2, fill='spring green')
 		else:
 			light_setting = 0
 			block_list2 = [49*unit]
-			light1 = canvas.create_rectangle(48*unit, 49*unit, 49*unit, 50*unit, fill='spring green')
-			light2 = canvas.create_rectangle(50*unit, 48*unit, 51*unit, 49*unit, fill='red2')
+			canvas.itemconfig(light1, fill='spring green')
+			canvas.itemconfig(light2, fill='red2')
 	
 	if light_setting == 0:
 		for car in road1:
@@ -143,7 +149,8 @@ while master_clock <= 1000:
 				canvas.move(car[1], 0, unit)
 			else:
 				if (position + unit) in block_list2:
-					block_list2.append(position)
+					if position not in block_list2:
+						block_list2.append(position)
 				else:
 					canvas.move(car[1], 0, unit)
 	else:
@@ -186,11 +193,11 @@ while master_clock <= 1000:
 	RL.learn(observation, action, reward, observation_)
 	
 	observation = observation_
-#	print(observation)
 	
 	light_delay += 1
 	master_clock += 1
 	time.sleep(0.2)
+
 
 root.mainloop()
 
