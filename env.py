@@ -16,10 +16,10 @@ canvas.create_rectangle(0*unit, 49*unit, 100*unit, 51*unit, fill='black')
 # the vertical road
 canvas.create_rectangle(49*unit, 0*unit, 51*unit, 100*unit, fill='black')
 # cars and lights are 4px*4px squares
-light_11 = canvas.create_rectangle(48*unit, 49*unit, 49*unit, 50*unit, fill='spring green')
-light_21 = canvas.create_rectangle(50*unit, 48*unit, 51*unit, 49*unit, fill='red2')
-light_12 = canvas.create_rectangle(51*unit, 50*unit, 52*unit, 51*unit, fill='spring green')
-light_22 = canvas.create_rectangle(49*unit, 51*unit, 50*unit, 52*unit, fill='red2')
+light_11 = canvas.create_rectangle(48*unit, 48*unit, 49*unit, 49*unit, fill='spring green', width=0)
+light_21 = canvas.create_rectangle(51*unit, 48*unit, 52*unit, 49*unit, fill='red2', width=0)
+light_12 = canvas.create_rectangle(51*unit, 50*unit, 52*unit, 51*unit, fill='spring green', width=0)
+light_22 = canvas.create_rectangle(49*unit, 51*unit, 50*unit, 52*unit, fill='red2', width=0)
 
 master_clock = 0
 #road1 = []
@@ -147,24 +147,26 @@ while master_clock <= length_of_experiment * replicaiton_of_experiment:
 	# chaneg light setting
 	if action == 'switch':
 		light_delay = -1
+		block_list_11 = [49*unit]
+		block_list_12 = [50*unit]
+		block_list_21 = [49*unit]
+		block_list_22 = [50*unit]
+		
 		if light_setting == 0:
 			light_setting = 1
-			block_list_11 = [49*unit]
-			block_list_12 = [50*unit]
 			canvas.itemconfig(light_11, fill='red2')
 			canvas.itemconfig(light_12, fill='red2')
 			canvas.itemconfig(light_21, fill='spring green')
 			canvas.itemconfig(light_22, fill='spring green')
 		else:
 			light_setting = 0
-			block_list_21 = [49*unit]
-			block_list_22 = [50*unit]
 			canvas.itemconfig(light_11, fill='spring green')
 			canvas.itemconfig(light_12, fill='spring green')
 			canvas.itemconfig(light_21, fill='red2')
 			canvas.itemconfig(light_22, fill='red2')
 	
 	if light_setting == 0:
+		
 		for car in road_11:
 			canvas.move(car[1], unit, 0)
 		for car in road_12:
@@ -218,12 +220,13 @@ while master_clock <= length_of_experiment * replicaiton_of_experiment:
 				canvas.move(car[1], -unit, 0)
 			else:
 				if (position - unit) in block_list_12:
-					block_list_12.append(position)
+					if position not in block_list_12:
+						block_list_12.append(position)
 				else:
 					canvas.move(car[1], -unit, 0)
 
 	# car appear
-	if master_clock % (rnd.randint(1, 10) + 5) == 0:
+	if master_clock % (rnd.randint(1, 8) ) == 0:
 		randappear = rnd.random()
 		if randappear > 0.75:
 			# generate a car on road_11
@@ -272,6 +275,7 @@ while master_clock <= length_of_experiment * replicaiton_of_experiment:
 	observation = observation_
 	light_delay += 1
 	master_clock += 1
+	time.sleep(0.2)
 
 with open('reward', 'w') as f:
 	f.write(str(reward_list))
