@@ -57,6 +57,13 @@ block_list_22 = [50*unit]
 closest_car_position_of_road1 = min(closest_car_position_of_road_11,closest_car_position_of_road_12)
 closest_car_position_of_road2 = min(closest_car_position_of_road_21,closest_car_position_of_road_22)
 
+length_of_experiment = 1000
+replicaiton_of_experiment = 100
+
+sum_of_reward = 0
+index_of_this_experiment = 0
+reward_list = []
+
 observation = str(closest_car_position_of_road1)+str(closest_car_position_of_road2)+str(light_setting)+str(light_delay)
 
 def next_car(road,direction,revers):
@@ -118,10 +125,14 @@ def update_state(action, observation, road_11, road_21, road_12, road_22):
 	observation = str(closest_car_position_of_road1)+str(closest_car_position_of_road2)+str(light_setting)+str(light_delay)
 	return observation
 
+observation = str(closest_car_position_of_road1)+str(closest_car_position_of_road2)+str(light_setting)+str(light_delay)
+
 RL = ql.QLearningTable()
 #last_switch_time = master_clock
 
-while master_clock <= 1000:
+########################################### main loop ###########################################
+
+while master_clock <= length_of_experiment * replicaiton_of_experiment:
 	
 	if light_delay <= 2:
 		action = 'no_switch'
@@ -195,7 +206,8 @@ while master_clock <= 1000:
 				canvas.move(car[1], unit, 0)
 			else:
 				if (position + unit) in block_list_11:
-					block_list_11.append(position)
+					if position not in block_list_11:
+						block_list_11.append(position)
 				else:
 					canvas.move(car[1], unit, 0)
 		for car in road_12:
@@ -211,7 +223,7 @@ while master_clock <= 1000:
 					canvas.move(car[1], -unit, 0)
 
 	# car appear
-	if master_clock % (rnd.randint(1, 8)) == 0:
+	if master_clock % (rnd.randint(1, 10) + 5) == 0:
 		randappear = rnd.random()
 		if randappear > 0.75:
 			# generate a car on road_11
@@ -236,8 +248,7 @@ while master_clock <= 1000:
 			car_name = 'car' + str(number_of_car_on_raod_21)
 			car = canvas.create_rectangle(50*unit, 0, 51*unit, unit, fill='white')
 			road_21.append([car_name, car])
-			number_of_car_on_raod_21 += 1
-	
+			number_of_car_on_raod_21 += 1	
 	root.update()
 	
 	# next state
@@ -245,14 +256,28 @@ while master_clock <= 1000:
 	observation_ = update_state(action, observation, road_11, road_21, road_12, road_22)
 	
 	reward = - len(block_list_11) - len(block_list_12)- len(block_list_21) - len(block_list_22) + 4
+	# coompute current reward
 	
+	sum_of_reward += reward
+	index_of_this_experiment += 1
+	if index_of_this_experiment == length_of_experiment:
+		print(sum_of_reward)
+		reward_list.append(sum_of_reward)
+		sum_of_reward = 0
+		index_of_this_experiment = 0
+	
+	# learning
 	RL.learn(observation, action, reward, observation_)
 	
 	observation = observation_
 	light_delay += 1
 	master_clock += 1
-	time.sleep(0.2)
+	time.sleep(0.1)
 
+with open('reward', 'w') as f:
+	f.write(str(reward_list))
+
+RL.print_table()
 
 root.mainloop()
 
