@@ -16,10 +16,10 @@ canvas.create_rectangle(0*unit, 49*unit, 100*unit, 51*unit, fill='black')
 # the vertical road
 canvas.create_rectangle(49*unit, 0*unit, 51*unit, 100*unit, fill='black')
 # cars and lights are 4px*4px squares
-light_11 = canvas.create_rectangle(48*unit, 49*unit, 49*unit, 50*unit, fill='spring green', width=0)
-light_21 = canvas.create_rectangle(50*unit, 48*unit, 51*unit, 49*unit, fill='red2', width=0)
-light_12 = canvas.create_rectangle(51*unit, 50*unit, 52*unit, 51*unit, fill='spring green', width=0)
-light_22 = canvas.create_rectangle(49*unit, 51*unit, 50*unit, 52*unit, fill='red2', width=0)
+light_11 = canvas.create_rectangle(48*unit, 49*unit, 49*unit, 50*unit, fill='spring green')
+light_21 = canvas.create_rectangle(50*unit, 48*unit, 51*unit, 49*unit, fill='red2')
+light_12 = canvas.create_rectangle(51*unit, 50*unit, 52*unit, 51*unit, fill='spring green')
+light_22 = canvas.create_rectangle(49*unit, 51*unit, 50*unit, 52*unit, fill='red2')
 
 master_clock = 0
 #road1 = []
@@ -228,25 +228,25 @@ while master_clock <= length_of_experiment * replicaiton_of_experiment:
 		if randappear > 0.75:
 			# generate a car on road_11
 			car_name = 'car' + str(number_of_car_on_raod_11)
-			car = canvas.create_rectangle(0.1*unit, 49.1*unit, 0.9*unit, 49.9*unit, fill='white', width=0)
+			car = canvas.create_rectangle(0, 49*unit, unit, 50*unit, fill='white')
 			road_11.append([car_name, car])
 			number_of_car_on_raod_11 += 1
 		elif randappear > 0.5:
 			# generate a car on road_12
 			car_name = 'car' + str(number_of_car_on_raod_11)
-			car = canvas.create_rectangle(99.1*unit, 50.1*unit, 99.9*unit, 50.9*unit, fill='white', width=0)
+			car = canvas.create_rectangle(99*unit, 50*unit, 100*unit, 51*unit, fill='white')
 			road_12.append([car_name, car])
 			number_of_car_on_raod_11 += 1
 		elif randappear > 0.25:
 			# generate a car on road_22
 			car_name = 'car' + str(number_of_car_on_raod_22)
-			car = canvas.create_rectangle(49.1*unit, 99.1*unit, 49.9*unit, 99.9*unit, fill='white', width=0)
+			car = canvas.create_rectangle(49*unit, 99*unit, 50*unit, 100*unit, fill='white')
 			road_22.append([car_name, car])
 			number_of_car_on_raod_22 += 1
 		else:
 			# generate a car on road_21
 			car_name = 'car' + str(number_of_car_on_raod_21)
-			car = canvas.create_rectangle(50.1*unit, 0.1*unit, 50.9*unit, 0.9*unit, fill='white', width=0)
+			car = canvas.create_rectangle(50*unit, 0, 51*unit, unit, fill='white')
 			road_21.append([car_name, car])
 			number_of_car_on_raod_21 += 1	
 	root.update()
