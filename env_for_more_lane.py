@@ -15,26 +15,40 @@ canvas.pack()
 canvas.create_rectangle(0*unit, 49*unit, 100*unit, 51*unit, fill='black')
 # the vertical road
 canvas.create_rectangle(49*unit, 0*unit, 51*unit, 100*unit, fill='black')
+# the third vertical road
+canvas.create_rectangle(30*unit, 0*unit, 32*unit, 100*unit, fill='black')
 # cars and lights are 4px*4px squares
 light_11 = canvas.create_rectangle(48*unit, 48*unit, 49*unit, 49*unit, fill='spring green')
-light_21 = canvas.create_rectangle(51*unit, 48*unit, 52*unit, 49*unit, fill='red2')
 light_12 = canvas.create_rectangle(51*unit, 50*unit, 52*unit, 51*unit, fill='spring green')
+light_21 = canvas.create_rectangle(51*unit, 48*unit, 52*unit, 49*unit, fill='red2')
 light_22 = canvas.create_rectangle(49*unit, 51*unit, 50*unit, 52*unit, fill='red2')
+
+light_31 = canvas.create_rectangle(29*unit, 48*unit, 30*unit, 49*unit, fill='red2')
+light_32 = canvas.create_rectangle(32*unit, 51*unit, 33*unit, 52*unit, fill='red2')
+light_41 = canvas.create_rectangle(32*unit, 48*unit, 33*unit, 49*unit, fill='spring green')
+light_42 = canvas.create_rectangle(29*unit, 51*unit, 30*unit, 52*unit, fill='spring green')
 
 master_clock = 0
 road_11 = []
 road_21 = []
 road_12 = []
 road_22 = []
+road_31 = []
+road_32 = []
+
 number_of_car_on_raod_11 = 0
 number_of_car_on_raod_21 = 0
 number_of_car_on_raod_12 = 0
 number_of_car_on_raod_22 = 0
+number_of_car_on_raod_31 = 0
+number_of_car_on_raod_32 = 0
 # 0-8, 9 if no cars
 closest_car_position_of_road_11 = 9
 closest_car_position_of_road_21 = 9
 closest_car_position_of_road_12 = 9
 closest_car_position_of_road_22 = 9
+closest_car_position_of_road_31 = 9
+closest_car_position_of_road_32 = 9
 # road1 light setting, 0:green, 1:red
 light_setting = 0
 amber_light = 0
@@ -191,6 +205,7 @@ def move_left(road,block_list,loc):
 		position = canvas.coords(car[1])[0]
 		# if the car has passed the intersection just move foreward
 		if position >= loc*unit:
+			# move right a unit
 			canvas.move(car[1], unit, 0)
 		else:
 			if (position + unit) in block_list:
@@ -203,7 +218,9 @@ def move_left(road,block_list,loc):
 def move_right(road,block_list,loc):
 	for car in road:
 		position = canvas.coords(car[1])[0]
+		# if the car has passed the intersection just move foreward
 		if position <= loc*unit:
+			# move left a unit
 			canvas.move(car[1], -unit, 0)
 		else:
 			if (position - unit) in block_list:
@@ -216,7 +233,9 @@ def move_right(road,block_list,loc):
 def move_down(road,block_list,loc):
 	for car in road:
 		position = canvas.coords(car[1])[1]
+		# if the car has passed the intersection just move foreward
 		if position >= loc*unit:
+			# move down a unit
 			canvas.move(car[1], 0, unit)
 		else:
 			if (position + unit) in block_list:
@@ -229,7 +248,9 @@ def move_down(road,block_list,loc):
 def move_up(road,block_list,loc):
 	for car in road:
 		position = canvas.coords(car[1])[1]
+		# if the car has passed the intersection just move foreward
 		if position <= loc*unit:
+			# move up a unit
 			canvas.move(car[1], 0, -unit)
 		else:
 			if (position - unit) in block_list:
