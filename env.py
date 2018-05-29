@@ -113,6 +113,7 @@ def update_state(action, observation, road1, road2):
 	return observation
 
 RL = ql.QLearningTable()
+#last_switch_time = master_clock
 
 while master_clock <= 1000:
 	
@@ -121,6 +122,10 @@ while master_clock <= 1000:
 		RL.check_state_exist(observation)
 	else:
 		action = RL.choose_action(observation)
+		
+#	if action == 'switch':
+#		print(master_clock-last_switch_time)
+#		last_switch_time = master_clock
 	
 	# chaneg light setting
 	if action == 'switch':
@@ -128,35 +133,33 @@ while master_clock <= 1000:
 		if light_setting == 0:
 			light_setting = 1
 			block_list1 = [49*unit]
-			light1 = canvas.create_rectangle(48*unit, 49*unit, 49*unit, 50*unit, fill='red2')
-			light2 = canvas.create_rectangle(50*unit, 48*unit, 51*unit, 49*unit, fill='spring green')
+			canvas.itemconfig(light1, fill='red2')
+			canvas.itemconfig(light2, fill='spring green')
 		else:
 			light_setting = 0
 			block_list2 = [49*unit]
-			light1 = canvas.create_rectangle(48*unit, 49*unit, 49*unit, 50*unit, fill='spring green')
-			light2 = canvas.create_rectangle(50*unit, 48*unit, 51*unit, 49*unit, fill='red2')
+			canvas.itemconfig(light1, fill='spring green')
+			canvas.itemconfig(light2, fill='red2')
 	
 	if light_setting == 0:
 		for car in road1:
 			canvas.move(car[1], unit, 0)
-		print('road2:', end='')
-		for car in reversed(road2):
+		for car in road2:
 			position = canvas.coords(car[1])[1]
 			# if the car has passed the intersection just move foreward
 			if position >= 49*unit:
 				# move down a unit
 				canvas.move(car[1], 0, unit)
 			else:
-				print(position)
-				print(block_list2)
 				if (position + unit) in block_list2:
-					block_list2.append(position)
+					if position not in block_list2:
+						block_list2.append(position)
 				else:
 					canvas.move(car[1], 0, unit)
 	else:
 		for car in road2:
 			canvas.move(car[1], 0, unit)
-		for car in reversed(road1):
+		for car in road1:
 			position = canvas.coords(car[1])[0]
 			# if the car has passed the intersection just move foreward
 			if position >= 49*unit:
@@ -186,11 +189,6 @@ while master_clock <= 1000:
 	
 	# next state
 	
-<<<<<<< HEAD
-	observation_, reward = update_state(action,observation,road1, road2)
-	RL.learn(observation, action, reward, observation_)
-	observation = observation_
-=======
 	observation_ = update_state(action, observation, road1, road2)
 	
 	reward = - len(block_list1) - len(block_list2) + 2
@@ -198,8 +196,6 @@ while master_clock <= 1000:
 	RL.learn(observation, action, reward, observation_)
 	
 	observation = observation_
-#	print(observation)
->>>>>>> 86c8c35a68a511440fdc080e07f590ef31655dae
 	
 	light_delay += 1
 	master_clock += 1
