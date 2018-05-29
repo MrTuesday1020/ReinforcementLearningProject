@@ -32,5 +32,5 @@ class QLearningTable:
 			self.q_table = self.q_table.append(pd.Series([0]*len(self.actions),index=self.q_table.columns,name=state))
 			
 	def print_table(self):
-		print(self.q_table.loc[:,:])
+		self.q_table.to_csv('qtable', sep='\t')
 		

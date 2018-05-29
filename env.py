@@ -35,7 +35,12 @@ change_time = 10
 block_list1 = [49*unit]
 block_list2 = [49*unit]
 
-observation = str(closest_car_position_of_road1)+str(closest_car_position_of_road2)+str(light_setting)+str(light_delay)
+length_of_experiment = 1000
+replicaiton_of_experiment = 100
+
+sum_of_reward = 0
+index_of_this_experiment = 0
+reward_list = []
 
 
 def closest_car(car_position, action, light_setting, clst_car_position_of_road, next_car_position):
@@ -109,13 +114,14 @@ def update_state(action, observation, road1, road2):
 	observation = str(closest_car_position_of_road1)+str(closest_car_position_of_road2)+str(light_setting)+str(light_delay)
 	return observation
 
+observation = str(closest_car_position_of_road1)+str(closest_car_position_of_road2)+str(light_setting)+str(light_delay)
+
 RL = ql.QLearningTable()
 #last_switch_time = master_clock
 
-sum_of_reward = 0
-count = 0
+########################################### main loop ###########################################
 
-while master_clock <= 1000 * 100:
+while master_clock <= length_of_experiment * replicaiton_of_experiment:
 	
 	if light_delay <= 2:
 		action = 'no_switch'
@@ -153,7 +159,8 @@ while master_clock <= 1000 * 100:
 			else:
 				if (position + unit) in block_list2:
 					if position not in block_list2:
-						block_list2.append(position)
+						if position not in block_list2:
+							block_list2.append(position)
 				else:
 					canvas.move(car[1], 0, unit)
 	else:
@@ -167,7 +174,8 @@ while master_clock <= 1000 * 100:
 				canvas.move(car[1], unit, 0)
 			else:
 				if (position + unit) in block_list1:
-					block_list1.append(position)
+					if position not in block_list1:
+						block_list1.append(position)
 				else:
 					canvas.move(car[1], unit, 0)
 
@@ -175,13 +183,13 @@ while master_clock <= 1000 * 100:
 		if rnd.random() > 0.5:
 			# generate a car on road1
 			car_name = 'car' + str(number_of_car_on_raod1)
-			car = canvas.create_rectangle(0, 49*unit, unit, 50*unit, fill='white')
+			car = canvas.create_rectangle(0*unit, 49*unit, unit, 50*unit, fill='white')
 			road1.append([car_name, car])
 			number_of_car_on_raod1 += 1
 		else:
 			# generate a car on road2
 			car_name = 'car' + str(number_of_car_on_raod2)
-			car = canvas.create_rectangle(50*unit, 0, 51*unit, unit, fill='white')
+			car = canvas.create_rectangle(50*unit, 0*unit, 51*unit, unit, fill='white')
 			road2.append([car_name, car])
 			number_of_car_on_raod2 += 1
 	
@@ -191,16 +199,18 @@ while master_clock <= 1000 * 100:
 	
 	observation_ = update_state(action, observation, road1, road2)
 	
+	# coompute current reward
 	reward = - len(block_list1) - len(block_list2) + 2
 	
 	sum_of_reward += reward
-	count += 1
-	if count == 1000:
+	index_of_this_experiment += 1
+	if index_of_this_experiment == length_of_experiment:
 		print(sum_of_reward)
+		reward_list.append(sum_of_reward)
 		sum_of_reward = 0
-		count = 0
+		index_of_this_experiment = 0
 	
-	
+	# learning
 	RL.learn(observation, action, reward, observation_)
 	
 	observation = observation_
@@ -208,6 +218,9 @@ while master_clock <= 1000 * 100:
 	light_delay += 1
 	master_clock += 1
 
+
+with open('reward', 'w') as f:
+	f.write(str(reward_list))
 
 RL.print_table()
 
