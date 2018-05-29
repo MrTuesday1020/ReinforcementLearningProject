@@ -138,6 +138,7 @@ while master_clock <= 1000:
 	if light_setting == 0:
 		for car in road1:
 			canvas.move(car[1], unit, 0)
+		print('road2:', end='')
 		for car in reversed(road2):
 			position = canvas.coords(car[1])[1]
 			# if the car has passed the intersection just move foreward
@@ -145,6 +146,8 @@ while master_clock <= 1000:
 				# move down a unit
 				canvas.move(car[1], 0, unit)
 			else:
+				print(position)
+				print(block_list2)
 				if (position + unit) in block_list2:
 					block_list2.append(position)
 				else:
@@ -164,7 +167,7 @@ while master_clock <= 1000:
 				else:
 					canvas.move(car[1], unit, 0)
 
-	if master_clock % (rnd.randint(1, 10) + 5) == 0:
+	if master_clock % (rnd.randint(1, 8)) == 0:
 		if rnd.random() > 0.5:
 			# generate a car on road1
 			car_name = 'car' + str(number_of_car_on_raod1)
