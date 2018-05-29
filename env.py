@@ -87,8 +87,6 @@ def update_state(action, observation, road1, road2):
 				next_car_position2 = int((49*unit - px2) / unit)
 			break
 	
-#	print(closest_car_position_of_road1, closest_car_position_of_road2)
-#	print(next_car_position1, next_car_position2)
 	closest_car_position_of_road1 = closest_car(int(observation[0]), action, observation[2], closest_car_position_of_road1, next_car_position1)
 	closest_car_position_of_road2 = closest_car(int(observation[1]), action, observation[2], closest_car_position_of_road2, next_car_position2)
  	
@@ -108,7 +106,6 @@ def update_state(action, observation, road1, road2):
 			light_delay = int(observation[3])
 		
 	observation = str(closest_car_position_of_road1)+str(closest_car_position_of_road2)+str(light_setting)+str(light_delay)
-#	print(closest_car_position_of_road1,closest_car_position_of_road2,light_setting,light_delay)
 	return observation
 
 RL = ql.QLearningTable()
@@ -138,16 +135,13 @@ while master_clock <= 1000:
 	if light_setting == 0:
 		for car in road1:
 			canvas.move(car[1], unit, 0)
-		print('road2:', end='')
-		for car in reversed(road2):
+		for car in road2:
 			position = canvas.coords(car[1])[1]
 			# if the car has passed the intersection just move foreward
 			if position >= 49*unit:
 				# move down a unit
 				canvas.move(car[1], 0, unit)
 			else:
-				print(position)
-				print(block_list2)
 				if (position + unit) in block_list2:
 					block_list2.append(position)
 				else:
@@ -155,7 +149,7 @@ while master_clock <= 1000:
 	else:
 		for car in road2:
 			canvas.move(car[1], 0, unit)
-		for car in reversed(road1):
+		for car in road1:
 			position = canvas.coords(car[1])[0]
 			# if the car has passed the intersection just move foreward
 			if position >= 49*unit:
