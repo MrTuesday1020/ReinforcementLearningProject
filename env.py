@@ -33,6 +33,8 @@ change_time = 10
 block_list1 = [196]
 block_list2 = [196]
 
+RL = ql.QLearningTable()
+
 observation = [closest_car_position_of_road1, closest_car_position_of_road2, light_setting, light_delay]
 
 def closest_car(car_position,action,light_setting, closest_car_position_of_road,next_car_position):
@@ -98,16 +100,18 @@ def update_state(action, observation, road1, road2):
 		else:
 			light_delay = observation[3]
 		
+		
+
 
 while master_clock <= 1000:
 	
-#	if light_delay <= 2:
-#		action = 'no_switch'
-#	else:
-#		action = RL.choose_action(str(observation))
+	if light_delay <= 2:
+		action = 'no_switch'
+	else:
+		action = RL.choose_action(str(observation))
 	
 	# chaneg light setting
-	if light_delay >= change_time:
+	if action == 'switch':
 		light_delay = -1
 		if light_setting == 0:
 			light_setting = 1
@@ -168,12 +172,14 @@ while master_clock <= 1000:
 	
 	# next state
 	
-	#observation_, reward = update_state(action,observation)
-	
+	observation_, reward = update_state(action,observation,road1, road2)
+	RL.learn(observation, action, reward, observation_)
+	observation = observation_
 	
 	light_delay += 1
 	master_clock += 1
 	time.sleep(0.2)
+
 
 root.mainloop()
 
