@@ -1,8 +1,7 @@
 from tkinter import *
 import time
 import random as rnd
-import RL_Qlearning as ql
-from extension import *
+import RL_Sarsa as ql
 
 root = Tk()
 # every 8px is a unit
@@ -59,7 +58,8 @@ performance_measure = []
 
 observation = str(closest_car_position_of_road1)+str(closest_car_position_of_road2)+str(light_setting)+str(light_delay)
 
-RL = ql.QLearningTable()
+#RL = ql.QLearningTable()
+RL = SarsaTable()
 
 
 ########################################### update observation ###########################################
@@ -237,14 +237,9 @@ def move_up(road,block_list,loc):
 
 ########################################### main loop ###########################################
 
+action = RL.choose_action(observation)
+
 while master_clock <= length_of_experiment * replicaiton_of_experiment:
-	
-	# choose action
-	if light_delay <= 2:
-		action = 'no_switch'
-		RL.check_state_exist(observation)
-	else:
-		action = RL.choose_action(observation)
 	
 	# chaneg light setting
 	if amber_light != 0:
@@ -331,6 +326,8 @@ while master_clock <= length_of_experiment * replicaiton_of_experiment:
 			number_of_car_on_raod_21 += 1	
 	root.update()
 	
+	
+	
 	# next state
 	observation_ = update_state(action, observation, road_11, road_21, road_12, road_22)
 	
@@ -350,11 +347,21 @@ while master_clock <= length_of_experiment * replicaiton_of_experiment:
 		performance_measure.append(sum_of_stop_cars)
 		sum_of_stop_cars = 0
 		index_of_this_experiment = 0
+		
+	# choose action
+	if light_delay <= 2:
+		action_ = 'no_switch'
+		RL.check_state_exist(observation_)
+	else:
+		action_ = RL.choose_action(observation_))
 	
 	# learning
-	RL.learn(observation, action, reward, observation_)
+	RL.learn(observation, action, reward, observation_, action_)
+#	RL.learn(observation, action, reward, observation_)
 	
 	observation = observation_
+	action = action_
+	
 	light_delay += 1
 	master_clock += 1
 
