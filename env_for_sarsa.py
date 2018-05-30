@@ -326,8 +326,6 @@ while master_clock <= length_of_experiment * replicaiton_of_experiment:
 			number_of_car_on_raod_21 += 1	
 	root.update()
 	
-	
-	
 	# next state
 	observation_ = update_state(action, observation, road_11, road_21, road_12, road_22)
 	

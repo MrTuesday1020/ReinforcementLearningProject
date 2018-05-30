@@ -2,7 +2,6 @@ from tkinter import *
 import time
 import random as rnd
 import RL_Qlearning as ql
-from extension import *
 
 root = Tk()
 # every 8px is a unit
