@@ -39,8 +39,8 @@ closest_car_position_of_road_22 = 9
 light_setting = 0
 amber_light = 0
 light_delay = 0
-# a fixed change time
-change_time = 10
+# base case change time
+base_case = 10
 # a list that store the postions that have been occupied
 block_list_11 = [49*unit]
 block_list_21 = [49*unit]
@@ -59,11 +59,7 @@ performance_measure = []
 
 observation = str(closest_car_position_of_road1)+str(closest_car_position_of_road2)+str(light_setting)+str(light_delay)
 
-
-observation = str(closest_car_position_of_road1)+str(closest_car_position_of_road2)+str(light_setting)+str(light_delay)
-
 RL = ql.QLearningTable()
-
 
 ########################################### update observation ###########################################
 #State = 
@@ -152,7 +148,6 @@ def next_car_up(road,loc):
 	return closest_car_position_of_road,next_car_position
 	
 def update_state(action, observation, road_11, road_21, road_12, road_22):
-	
 	closest_car_position_of_road_11,next_car_position_11 = next_car_left(road_11,49)
 	closest_car_position_of_road_12,next_car_position_12 = next_car_right(road_12,50)
 	closest_car_position_of_road_21,next_car_position_21 = next_car_down(road_21,49)
@@ -241,6 +236,12 @@ def move_up(road,block_list,loc):
 ########################################### main loop ###########################################
 
 while master_clock <= length_of_experiment * replicaiton_of_experiment:
+	
+	# delete cars which have move outside the canvas
+	road_11 = [car for car in road_11 if canvas.coords(car[1])[0] <= 100*unit]
+	road_12 = [car for car in road_12 if canvas.coords(car[1])[0] >= 0*unit]
+	road_21 = [car for car in road_21 if canvas.coords(car[1])[1] <= 100*unit]
+	road_22 = [car for car in road_22 if canvas.coords(car[1])[1] >= 0*unit]
 	
 	# choose action
 	if light_delay <= 2:
