@@ -1,5 +1,7 @@
 import numpy as np
 import pandas as pd
+import os.path
+
 
 class QLearningTable:
 	def __init__(self, actions=['switch', 'no_switch'], gamma=0.9, alpha=0.1, e_greedy=0.9):
@@ -7,7 +9,10 @@ class QLearningTable:
 		self.gamma = gamma	# Use discount factor: gamma = .9
 		self.alpha = alpha	# Use learning rate: alpha = .1
 		self.epsilon = e_greedy	# Epsilon-greedy exploration 10%
-		self.q_table = pd.DataFrame(columns=self.actions, dtype=np.float64)
+		if os.path.exists('qtable'):
+			self.q_table = pd.read_csv('qtable')
+		else:
+			self.q_table = pd.DataFrame(columns=self.actions, dtype=np.float64)
 
 	def choose_action(self, observation):
 		self.check_state_exist(observation)
@@ -31,6 +36,6 @@ class QLearningTable:
 		if state not in self.q_table.index:
 			self.q_table = self.q_table.append(pd.Series([0]*len(self.actions),index=self.q_table.columns,name=state))
 			
-	def print_table(self):
-		self.q_table.to_csv('qtable', sep='\t')
+	def save_table(self):
+		self.q_table.to_csv('qtable', index=False)
 		
