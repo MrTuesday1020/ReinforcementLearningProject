@@ -10,13 +10,14 @@ class RL(object):
         self.gamma = gamma   # Use discount factor: gamma = .9
         self.epsilon = e_greedy    # Epsilon-greedy exploration 10%
         if os.path.exists('qtable'):
-            self.q_table = pd.read_csv('qtable')
+            self.q_table = pd.io.parsers.read_csv('qtable', sep='\t', index_col=0)
         else:
             self.q_table = pd.DataFrame(columns=self.actions, dtype=np.float64)
 
     def check_state_exist(self, state):
         if state not in self.q_table.index:
             # append new state to q table
+            print(state)
             self.q_table = self.q_table.append(pd.Series([0]*len(self.actions), index=self.q_table.columns, name=state))
 
     def choose_action(self, observation):
@@ -37,7 +38,7 @@ class RL(object):
         pass
             
     def save_table(self):
-        self.q_table.to_csv('qtable')
+        self.q_table.to_csv('qtable', sep='\t')
 
 # off-policy
 class QLearningTable(RL):
@@ -63,10 +64,11 @@ class SarsaTable(RL):
         q_target = r + self.gamma * self.q_table.loc[s_, a_]  # next state is not terminal
         self.q_table.loc[s, a] += self.alpha * (q_target - q_predict)  # update
 
+
 # backward eligibility traces
 class SarsaLambdaTable(RL):
-    def __init__(self, actions, learning_rate=0.01, reward_decay=0.9, e_greedy=0.9, trace_decay=0.9):
-        super(SarsaLambdaTable, self).__init__(actions, learning_rate, reward_decay, e_greedy)
+    def __init__(self, actions, alpha=0.1, gamma=0.9, e_greedy=0.9, trace_decay=0.9):
+        super(SarsaLambdaTable, self).__init__(actions, alpha, gamma, e_greedy)
 
         # backward view, eligibility trace.
         self.lambda_ = trace_decay
@@ -84,11 +86,7 @@ class SarsaLambdaTable(RL):
     def learn(self, s, a, r, s_, a_):
         self.check_state_exist(s_)
         q_predict = self.q_table.loc[s, a]
-        if s_ != 'terminal':
-            q_target = r + self.gamma * self.q_table.loc[s_, a_]  # next state is not terminal
-        else:
-            q_target = r  # next state is terminal
-        error = q_target - q_predict
+        q_target = r + self.gamma * self.q_table.loc[s_, a_]  # next state is not terminal
 
         # increase trace amount for visited state-action pair
 
