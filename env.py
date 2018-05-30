@@ -18,9 +18,9 @@ canvas.create_rectangle(0*unit, 49*unit, 100*unit, 51*unit, fill='black')
 # the vertical road
 canvas.create_rectangle(49*unit, 0*unit, 51*unit, 100*unit, fill='black')
 # cars and lights are 4px*4px squares
-light_11 = canvas.create_rectangle(48*unit, 48*unit, 49*unit, 49*unit, fill='spring green')
-light_21 = canvas.create_rectangle(51*unit, 48*unit, 52*unit, 49*unit, fill='red2')
-light_12 = canvas.create_rectangle(51*unit, 50*unit, 52*unit, 51*unit, fill='spring green')
+light_11 = canvas.create_rectangle(48*unit, 49*unit, 49*unit, 50*unit, fill='SpringGreen3')
+light_21 = canvas.create_rectangle(50*unit, 48*unit, 51*unit, 49*unit, fill='red2')
+light_12 = canvas.create_rectangle(51*unit, 50*unit, 52*unit, 51*unit, fill='SpringGreen3')
 light_22 = canvas.create_rectangle(49*unit, 51*unit, 50*unit, 52*unit, fill='red2')
 
 road_11 = []
@@ -274,13 +274,13 @@ while current_training < amount_of_training:
 				if amber_light == 1:	# road1: yellow -> red; road2: red -> green
 					canvas.itemconfig(light_11, fill='red2')
 					canvas.itemconfig(light_12, fill='red2')
-					canvas.itemconfig(light_21, fill='spring green')
-					canvas.itemconfig(light_22, fill='spring green')
+					canvas.itemconfig(light_21, fill='SpringGreen3')
+					canvas.itemconfig(light_22, fill='SpringGreen3')
 				else:	# road2: yellow -> red; road1: red -> green
 					canvas.itemconfig(light_21, fill='red2')
 					canvas.itemconfig(light_22, fill='red2')
-					canvas.itemconfig(light_11, fill='spring green')
-					canvas.itemconfig(light_12, fill='spring green')
+					canvas.itemconfig(light_11, fill='SpringGreen3')
+					canvas.itemconfig(light_12, fill='SpringGreen3')
 				amber_light = 0
 			
 			if action == 'switch':
@@ -292,13 +292,13 @@ while current_training < amount_of_training:
 				if light_setting == 0:	# road1: green -> yellow; road2: red -> red
 					light_setting = 1
 					amber_light = 1
-					canvas.itemconfig(light_11, fill='blue')
-					canvas.itemconfig(light_12, fill='blue')
+					canvas.itemconfig(light_11, fill='yellow')
+					canvas.itemconfig(light_12, fill='yellow')
 				else:	# road2: green -> yellow; road1: red -> red
 					light_setting = 0
 					amber_light = 2
-					canvas.itemconfig(light_21, fill='blue')
-					canvas.itemconfig(light_22, fill='blue')
+					canvas.itemconfig(light_21, fill='yellow')
+					canvas.itemconfig(light_22, fill='yellow')
 
 			# car move
 			if light_setting == 0:
