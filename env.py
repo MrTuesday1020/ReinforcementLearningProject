@@ -258,7 +258,7 @@ while current_training < amount_of_training:
 
 		current_time = 0
 		sum_of_stop_cars = 0
-		period_of_time = 100
+		period_of_time = 1000
 		
 		if Sarsa:
 			action = RL.choose_action(str(observation))
