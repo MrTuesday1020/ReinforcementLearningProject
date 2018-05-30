@@ -346,7 +346,7 @@ while master_clock <= length_of_experiment * replicaiton_of_experiment:
 		reward = 0
 	
 	# coompute the amount of stop cars
-	stop_cars = - len(block_list_11) - len(block_list_12)- len(block_list_21) - len(block_list_22) + 4
+	stop_cars = len(block_list_11) + len(block_list_12) + len(block_list_21) + len(block_list_22) - 4
 	sum_of_stop_cars += stop_cars
 	index_of_this_experiment += 1
 	if index_of_this_experiment == length_of_experiment:
@@ -365,7 +365,7 @@ while master_clock <= length_of_experiment * replicaiton_of_experiment:
 with open('performance_measure', 'w') as f:
 	f.write(str(performance_measure))
 
-RL.print_table()
+RL.save_table()
 
 root.mainloop()
 
