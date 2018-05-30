@@ -1,7 +1,10 @@
 from tkinter import *
 import time
 import random as rnd
-import RL_Qlearning as ql
+import Rainforcement_Learning as ql
+
+# mode Sarsa or Qlearning
+Sarsa = False
 
 root = Tk()
 # every 8px is a unit
@@ -234,7 +237,10 @@ while current_training < amount_of_training:
 	current_episode = 0
 	performance_measure = []
 	
-	RL = ql.QLearningTable()
+	if Sarsa:
+		RL = ql.SarsaTable()
+	else:
+		RL = ql.QLearningTable()
 	
 	# do 100 episodes
 	while current_episode < amount_of_episode:
@@ -242,6 +248,9 @@ while current_training < amount_of_training:
 		current_time = 0
 		sum_of_stop_cars = 0
 		period_of_time = 1000
+		
+		if Sarsa:
+			action = RL.choose_action(observation)
 
 		# every 1000 time step as a unit
 		while current_time <= period_of_time:
@@ -253,11 +262,12 @@ while current_training < amount_of_training:
 			road_22 = [car for car in road_22 if canvas.coords(car[1])[1] >= 0*unit]
 			
 			# choose action
-			if light_delay <= 2:
-				action = 'no_switch'
-				RL.check_state_exist(observation)
-			else:
-				action = RL.choose_action(observation)
+			if not Sarsa:
+				if light_delay <= 2:
+					action = 'no_switch'
+					RL.check_state_exist(observation)
+				else:
+					action = RL.choose_action(observation)
 			
 			# chaneg light setting
 			if amber_light != 0:
@@ -353,12 +363,24 @@ while current_training < amount_of_training:
 				reward = -1
 			else:
 				reward = 0
+				
+			if Sarsa:
+				if light_delay <= 2:
+					action_ = 'no_switch'
+					RL.check_state_exist(observation_)
+				else:
+					action_ = RL.choose_action(observation_)
 			
 			# learning
-			RL.learn(observation, action, reward, observation_)
+			if Sarsa:
+				RL.learn(observation, action, reward, observation_, action_)
+			else:
+				RL.learn(observation, action, reward, observation_)
 			
 			# observation
 			observation = observation_
+			if Sarsa:
+				action = action_
 			
 			# compute the amount of stop cars
 			stop_cars = len(block_list_11) + len(block_list_12) + len(block_list_21) + len(block_list_22) - 4
