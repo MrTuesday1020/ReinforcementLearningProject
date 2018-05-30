@@ -9,8 +9,8 @@ class RL(object):
         self.alpha = alpha    # Use learning rate: alpha = .1
         self.gamma = gamma   # Use discount factor: gamma = .9
         self.epsilon = e_greedy    # Epsilon-greedy exploration 10%
-        if os.path.exists('qtable'):
-            self.q_table = pd.io.parsers.read_csv('qtable', sep='\t', index_col=0)
+        if os.path.exists('qtable.txt'):
+            self.q_table = pd.read_csv('qtable.txt', names=['switch', 'no_switch'], header=None)
         else:
             self.q_table = pd.DataFrame(columns=self.actions, dtype=np.float64)
 
@@ -37,7 +37,7 @@ class RL(object):
         pass
             
     def save_table(self):
-        self.q_table.to_csv('qtable', sep='\t')
+        self.q_table.to_csv('qtable.txt', header=None)
 
 # off-policy
 class QLearningTable(RL):
