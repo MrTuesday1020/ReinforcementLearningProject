@@ -4,7 +4,7 @@ import random as rnd
 import ReinforcementLearning as ql
 
 # mode Sarsa or Qlearning
-Sarsa = False
+Sarsa = True
 
 root = Tk()
 # every 8px is a unit

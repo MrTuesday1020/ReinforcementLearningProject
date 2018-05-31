@@ -1,0 +1,11 @@
+Sarsa
+
+Reward: -1.0 if a car is stopped at grid
+
+Discount factor: gamma = 0.9
+
+Learning rate: alpha = 0.1
+
+Epsilon-greedy exploration 10%
+
+Generate cars: time % (rnd.randint(1, 10) + 5) == 0
