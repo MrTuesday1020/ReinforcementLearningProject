@@ -2,7 +2,7 @@
 
 ## Moduel
 
-Paragraph Tkinter(canvas): Tkinter is used to establish a visible window to simulate the environment. Then we create roads, cars and roads by canvas. We use 
+Tkinter(canvas): Tkinter is used to establish a visible window to simulate the environment. Then we create roads, cars and roads by canvas. And we make animations by canvas.move function to simulate the move of the cars.
 
 ## Code
 1. Basecase.py
