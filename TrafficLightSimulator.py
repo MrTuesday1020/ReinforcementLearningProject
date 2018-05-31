@@ -404,7 +404,7 @@ while current_training < amount_of_training:
 
 
 	print(performance_measure)
-	performance_file = 'qlearning/performance_' + str(current_training)
+	performance_file = 'data/performance_' + str(current_training)
 	with open(performance_file, 'w') as f:
 		f.write(str(performance_measure))
 
