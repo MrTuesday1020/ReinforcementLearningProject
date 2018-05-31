@@ -328,19 +328,19 @@ while current_training < amount_of_training:
 			# car appear
 			if current_time % (rnd.randint(1, 10) + 5) == 0:
 				randappear = rnd.random()
-				if randappear > 0.75:
+				if randappear > 0.7:
 					# generate a car on road_11
 					car_name = 'car' + str(number_of_car_on_raod_11)
 					car = canvas.create_rectangle(0, 49*unit, unit, 50*unit, fill='grey')
 					road_11.append([car_name, car])
 					number_of_car_on_raod_11 += 1
-				elif randappear > 0.5:
+				elif randappear > 0.4:
 					# generate a car on road_12
 					car_name = 'car' + str(number_of_car_on_raod_12)
 					car = canvas.create_rectangle(99*unit, 50*unit, 100*unit, 51*unit, fill='grey')
 					road_12.append([car_name, car])
 					number_of_car_on_raod_12 += 1
-				elif randappear > 0.25:
+				elif randappear > 0.2:
 					# generate a car on road_22
 					car_name = 'car' + str(number_of_car_on_raod_22)
 					car = canvas.create_rectangle(49*unit, 99*unit, 50*unit, 100*unit, fill='white')
@@ -359,10 +359,10 @@ while current_training < amount_of_training:
 			observation_ = update_state(action, observation, road_11, road_21, road_12, road_22)
 			
 			# Reward: -1.0 if a car is stopped at a red light on either road (Including the case that the light delay is less than 3 time step), 0 otherwise.
-#			if len(block_list_11) > 1 or len(block_list_12) > 1 or len(block_list_21) > 1 or len(block_list_22) > 1:
-#				reward = -1
-#			else:
-#				reward = 0
+			if len(block_list_11) > 1 or len(block_list_12) > 1 or len(block_list_21) > 1 or len(block_list_22) > 1:
+				reward = -1
+			else:
+				reward = 0
 			
 			# Reward: -1.0 if a car is stopped at a red light on either road (Excluding the case that the light delay is less than 3 time step), 0 otherwise.
 #			if len(block_list_11) > 1 or len(block_list_12) > 1 or len(block_list_21) > 1 or len(block_list_22) > 1:
@@ -374,7 +374,7 @@ while current_training < amount_of_training:
 #				reward = 0
 
 			# Reward: every step, every grid, a car stops, reward minus 1.
-			reward = - (len(block_list_11) + len(block_list_12) + len(block_list_21) + len(block_list_22) - 4)
+			#reward = - (len(block_list_11) + len(block_list_12) + len(block_list_21) + len(block_list_22) - 4)
 				
 			if Sarsa:
 				if light_delay <= 2:
