@@ -359,7 +359,7 @@ while current_training < amount_of_training:
 			# next state
 			observation_ = update_state(action, observation, road_11, road_21, road_12, road_22)
 			
-			# Reward -1.0 if a car is stopped at a red light on either road, zero otherwise.
+			# Reward  
 			if len(block_list_11) > 1 or len(block_list_12) > 1 or len(block_list_21) > 1 or len(block_list_22) > 1:
 				reward = -1
 			else:
