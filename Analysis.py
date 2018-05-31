@@ -4,7 +4,7 @@ import re
 import numpy as np
 
 
-dirctory = 'sarsa3'
+dirctory = 'UnbalancedTrafficIntensity'
 
 files = os.listdir(dirctory)
 files = [i for i in files if re.match('performance_', i)]

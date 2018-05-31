@@ -328,19 +328,19 @@ while current_training < amount_of_training:
 			# car appear
 			if current_time % (rnd.randint(1, 10) + 5) == 0:
 				randappear = rnd.random()
-				if randappear > 0.7:
+				if randappear > 0.75:
 					# generate a car on road_11
 					car_name = 'car' + str(number_of_car_on_raod_11)
 					car = canvas.create_rectangle(0, 49*unit, unit, 50*unit, fill='grey')
 					road_11.append([car_name, car])
 					number_of_car_on_raod_11 += 1
-				elif randappear > 0.4:
+				elif randappear > 0.5:
 					# generate a car on road_12
 					car_name = 'car' + str(number_of_car_on_raod_12)
 					car = canvas.create_rectangle(99*unit, 50*unit, 100*unit, 51*unit, fill='grey')
 					road_12.append([car_name, car])
 					number_of_car_on_raod_12 += 1
-				elif randappear > 0.2:
+				elif randappear > 0.25:
 					# generate a car on road_22
 					car_name = 'car' + str(number_of_car_on_raod_22)
 					car = canvas.create_rectangle(49*unit, 99*unit, 50*unit, 100*unit, fill='white')
