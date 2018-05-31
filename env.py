@@ -15,7 +15,7 @@ canvas.pack()
 # width of a road is 8px
 # the horizontal road
 canvas.create_rectangle(0*unit, 49*unit, 100*unit, 51*unit, fill='black')
-# the vertical road
+# the vertical road
 canvas.create_rectangle(49*unit, 0*unit, 51*unit, 100*unit, fill='black')
 # cars and lights are 4px*4px squares
 light_11 = canvas.create_rectangle(48*unit, 49*unit, 49*unit, 50*unit, fill='SpringGreen3')
@@ -52,7 +52,6 @@ closest_car_position_of_road1 = min(closest_car_position_of_road_11,closest_car_
 closest_car_position_of_road2 = min(closest_car_position_of_road_21,closest_car_position_of_road_22)
 
 observation = [closest_car_position_of_road1,closest_car_position_of_road2,light_setting,light_delay]
-#observation = str(closest_car_position_of_road1)+str(closest_car_position_of_road2)+str(light_setting)+str(light_delay)
 
 ########################################### update observation ###########################################
 #State = 
@@ -153,32 +152,23 @@ def update_state(action, observation, road_11, road_21, road_12, road_22):
 
 	closest_car_position_of_road1 = closest_car(observation[0], action, observation[2], closest_car_position_of_road1, next_car_position1)
 	closest_car_position_of_road2 = closest_car(observation[1], action, observation[2], closest_car_position_of_road2, next_car_position2)
-#	closest_car_position_of_road1 = closest_car(int(observation[0]), action, observation[2], closest_car_position_of_road1, next_car_position1)
-#	closest_car_position_of_road2 = closest_car(int(observation[1]), action, observation[2], closest_car_position_of_road2, next_car_position2)
  	
 	if action == 'switch':
 		if observation[2] == 0:
-#		if observation[2] == '0':
 			light_setting = 1
 		else:
 			light_setting = 0
 		light_delay = 0
 	else:
 		light_setting = observation[2]
-#		light_setting = int(observation[2])
 		
 		if observation[3] != 3:
 			light_delay = observation[3] + 1
 		else:
 			light_delay = observation[3]
-			
-#		if observation[3] != '3':
-#			light_delay = int(observation[3]) + 1
-#		else:
-#			light_delay = int(observation[3])
+
 		
 	observation = [closest_car_position_of_road1,closest_car_position_of_road2,light_setting,light_delay]
-#	observation = str(closest_car_position_of_road1)+str(closest_car_position_of_road2)+str(light_setting)+str(light_delay)
 	return observation
 	
 ########################################### move ###########################################
@@ -238,10 +228,10 @@ def move_up(road,block_list,loc):
 
 ########################################### main loop ###########################################
 
-amount_of_training = 100
+amount_of_training = 50
 current_training = 0
 
-# do 100 training
+# do 50 training
 while current_training < amount_of_training:
 	
 	amount_of_episode = 100
