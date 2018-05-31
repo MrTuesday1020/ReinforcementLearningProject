@@ -1,7 +1,7 @@
 from tkinter import *
 import time
 import random as rnd
-import Rainforcement_Learning as ql
+import ReinforcementLearning as ql
 
 # mode Sarsa or Qlearning
 Sarsa = False
@@ -15,12 +15,12 @@ canvas.pack()
 # width of a road is 8px
 # the horizontal road
 canvas.create_rectangle(0*unit, 49*unit, 100*unit, 51*unit, fill='black')
-# the vertical road
+# the vertical road
 canvas.create_rectangle(49*unit, 0*unit, 51*unit, 100*unit, fill='black')
 # cars and lights are 4px*4px squares
-light_11 = canvas.create_rectangle(48*unit, 48*unit, 49*unit, 49*unit, fill='spring green')
-light_21 = canvas.create_rectangle(51*unit, 48*unit, 52*unit, 49*unit, fill='red2')
-light_12 = canvas.create_rectangle(51*unit, 50*unit, 52*unit, 51*unit, fill='spring green')
+light_11 = canvas.create_rectangle(48*unit, 49*unit, 49*unit, 50*unit, fill='SpringGreen3')
+light_21 = canvas.create_rectangle(50*unit, 48*unit, 51*unit, 49*unit, fill='red2')
+light_12 = canvas.create_rectangle(51*unit, 50*unit, 52*unit, 51*unit, fill='SpringGreen3')
 light_22 = canvas.create_rectangle(49*unit, 51*unit, 50*unit, 52*unit, fill='red2')
 
 road_11 = []
@@ -166,7 +166,7 @@ def update_state(action, observation, road_11, road_21, road_12, road_22):
 			light_delay = observation[3] + 1
 		else:
 			light_delay = observation[3]
-		
+			
 	observation = [closest_car_position_of_road1,closest_car_position_of_road2,light_setting,light_delay]
 	return observation
 	
@@ -227,13 +227,13 @@ def move_up(road,block_list,loc):
 
 ########################################### main loop ###########################################
 
-amount_of_training = 100
+amount_of_training = 10
 current_training = 0
 
-# do 100 training
+# do 50 training
 while current_training < amount_of_training:
 	
-	amount_of_episode = 100
+	amount_of_episode = 50
 	current_episode = 0
 	performance_measure = []
 	
@@ -247,7 +247,7 @@ while current_training < amount_of_training:
 
 		current_time = 0
 		sum_of_stop_cars = 0
-		period_of_time = 100
+		period_of_time = 1000
 		
 		if Sarsa:
 			action = RL.choose_action(str(observation))
@@ -274,13 +274,13 @@ while current_training < amount_of_training:
 				if amber_light == 1:	# road1: yellow -> red; road2: red -> green
 					canvas.itemconfig(light_11, fill='red2')
 					canvas.itemconfig(light_12, fill='red2')
-					canvas.itemconfig(light_21, fill='spring green')
-					canvas.itemconfig(light_22, fill='spring green')
+					canvas.itemconfig(light_21, fill='SpringGreen3')
+					canvas.itemconfig(light_22, fill='SpringGreen3')
 				else:	# road2: yellow -> red; road1: red -> green
 					canvas.itemconfig(light_21, fill='red2')
 					canvas.itemconfig(light_22, fill='red2')
-					canvas.itemconfig(light_11, fill='spring green')
-					canvas.itemconfig(light_12, fill='spring green')
+					canvas.itemconfig(light_11, fill='SpringGreen3')
+					canvas.itemconfig(light_12, fill='SpringGreen3')
 				amber_light = 0
 			
 			if action == 'switch':
@@ -292,13 +292,13 @@ while current_training < amount_of_training:
 				if light_setting == 0:	# road1: green -> yellow; road2: red -> red
 					light_setting = 1
 					amber_light = 1
-					canvas.itemconfig(light_11, fill='blue')
-					canvas.itemconfig(light_12, fill='blue')
+					canvas.itemconfig(light_11, fill='yellow')
+					canvas.itemconfig(light_12, fill='yellow')
 				else:	# road2: green -> yellow; road1: red -> red
 					light_setting = 0
 					amber_light = 2
-					canvas.itemconfig(light_21, fill='blue')
-					canvas.itemconfig(light_22, fill='blue')
+					canvas.itemconfig(light_21, fill='yellow')
+					canvas.itemconfig(light_22, fill='yellow')
 
 			# car move
 			if light_setting == 0:
@@ -358,7 +358,7 @@ while current_training < amount_of_training:
 			# next state
 			observation_ = update_state(action, observation, road_11, road_21, road_12, road_22)
 			
-			# Reward -1.0 if a car is stopped at a red light on either road, zero otherwise.
+			# Reward  
 			if len(block_list_11) > 1 or len(block_list_12) > 1 or len(block_list_21) > 1 or len(block_list_22) > 1:
 				reward = -1
 			else:
