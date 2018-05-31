@@ -4,7 +4,7 @@ import random as rnd
 import ReinforcementLearning as ql
 
 # mode Sarsa or Qlearning
-Sarsa = True
+Sarsa = False
 
 root = Tk()
 # every 8px is a unit
@@ -365,13 +365,16 @@ while current_training < amount_of_training:
 #				reward = 0
 			
 			# Reward: -1.0 if a car is stopped at a red light on either road (Excluding the case that the light delay is less than 3 time step), 0 otherwise.
-			if len(block_list_11) > 1 or len(block_list_12) > 1 or len(block_list_21) > 1 or len(block_list_22) > 1:
-				if light_delay < 3:
-					reward = 0
-				else:
-					reward = -1
-			else:
-				reward = 0
+#			if len(block_list_11) > 1 or len(block_list_12) > 1 or len(block_list_21) > 1 or len(block_list_22) > 1:
+#				if light_delay < 3:
+#					reward = 0
+#				else:
+#					reward = -1
+#			else:
+#				reward = 0
+
+			# Reward: every step, every grid, a car stops, reward minus 1.
+			reward = - (len(block_list_11) + len(block_list_12) + len(block_list_21) + len(block_list_22) - 4)
 				
 			if Sarsa:
 				if light_delay <= 2:
