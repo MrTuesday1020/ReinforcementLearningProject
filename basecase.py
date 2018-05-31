@@ -1,7 +1,6 @@
 from tkinter import *
 import time
 import random as rnd
-import Rainforcement_Learning as ql
 
 # mode Sarsa or Qlearning
 Sarsa = False
