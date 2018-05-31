@@ -374,7 +374,11 @@ while current_training < amount_of_training:
 #				reward = 0
 
 			# Reward: every step, every grid, a car stops, reward minus 1.
+<<<<<<< HEAD
 #			reward = - (len(block_list_11) + len(block_list_12) + len(block_list_21) + len(block_list_22) - 4)
+=======
+			#reward = - (len(block_list_11) + len(block_list_12) + len(block_list_21) + len(block_list_22) - 4)
+>>>>>>> 3d756abfa6518643be4a9c4389a5b671b6d14d90
 				
 			if Sarsa:
 				if light_delay <= 2:
