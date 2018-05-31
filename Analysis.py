@@ -3,7 +3,7 @@ import os
 import re
 import numpy as np
 
-dirctory = 'basecase'
+dirctory = 'sarsa'
 files = os.listdir(dirctory)
 files = [i for i in files if re.match('performance_', i)]
 x_axis = []
