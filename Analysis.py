@@ -1,5 +1,8 @@
 import matplotlib.pyplot as plt
+import os
+import re
 
-for i in range(10):
-	with open() as f:
-	
+dirctory = 'data1'
+files = os.listdir(dirctory)
+
+files = [i for i in files if re.match('performance_', i)]
