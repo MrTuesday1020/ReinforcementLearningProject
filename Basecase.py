@@ -104,7 +104,7 @@ def move_up(road,block_list,loc):
 
 ########################################### main loop ###########################################
 
-amount_of_training = 1
+amount_of_training = 10
 current_training = 0
 
 # do 5 training for basecase
