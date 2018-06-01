@@ -26,19 +26,21 @@ def axis(dirctory):
 	return x_axis,y_axis
 
 
-x_axis_1,y_axis_1 = axis('sarsa0')
-mean_1 = np.mean(y_axis_1)
-mean_line_1 = [mean_1 for _ in range(len(y_axis_1))]
-plt.plot(x_axis_1, y_axis_1)
-plt.plot(x_axis_1, mean_line_1,label='mean=%d'%mean_1)
+#x_axis_1,y_axis_1 = axis('qlearning0')
+#x_axis_1 = x_axis_1[:50]
+#y_axis_1 = y_axis_1[:50]
+#mean_1 = np.mean(y_axis_1)
+#mean_line_1 = [mean_1 for _ in range(len(y_axis_1))]
+#plt.plot(x_axis_1, y_axis_1)
+#plt.plot(x_axis_1, mean_line_1,label='mean=%d'%mean_1)
 
 x_axis_2,y_axis_2 = axis('data')
 mean_2 = np.mean(y_axis_2)
-mean_line_2 = [mean_2 for _ in range(len(y_axis_1))]
+mean_line_2 = [mean_2 for _ in range(len(y_axis_2))]
 plt.plot(x_axis_2, y_axis_2)
 plt.plot(x_axis_2, mean_line_2,label='mean=%d'%mean_2)
 
 plt.ylabel('Performance measure')
 plt.xlabel('Number of training')
 plt.legend()
-plt.savefig('pic/figure_'+'sa0_ql0')
+plt.savefig('pic/figure_'+'ql0_ql1_ql2')
