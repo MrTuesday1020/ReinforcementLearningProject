@@ -2,7 +2,16 @@
 
 ## Moduel
 
-Paragraph Tkinter(canvas): Tkinter is used to establish a visible window to simulate the environment. Then we create roads, cars and roads by canvas. We use 
+**Tkinter(canvas)**: Tkinter is used to establish a visible window to simulate the environment. Then we create roads, cars and roads by canvas. And we make animations by canvas.move function to simulate the move of the cars.
+
+
+**Random**: Random lib is used to generate cars randomly.
+
+
+**Numpy and Pandas**: We use this two libs to process and analyse data in a convenient way.
+
+
+**Matplotlib**: We use this lib to convert data into high quality figures and help us analyse data in a more efficient method.
 
 ## Code
 1. Basecase.py

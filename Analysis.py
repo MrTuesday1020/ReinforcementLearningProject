@@ -4,7 +4,7 @@ import re
 import numpy as np
 
 
-dirctory = 'qlearning2'
+dirctory = 'data'
 
 files = os.listdir(dirctory)
 files = [i for i in files if re.match('performance_', i)]
@@ -27,7 +27,13 @@ for item in sorted(files):
 	
 x_axis = [i for i in range(len(y_axis))]
 
+mean = np.mean(y_axis)
+
+mean_line = [mean for _ in range(len(y_axis))]
+
 plt.plot(x_axis, y_axis)
+plt.plot(x_axis, mean_line,label='mean=%d'%mean)
 plt.ylabel('Performance measure')
 plt.xlabel('Number of training')
+plt.legend()
 plt.savefig(dirctory + '/figure')
