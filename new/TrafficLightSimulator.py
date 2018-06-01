@@ -4,7 +4,7 @@ import random as rnd
 import ReinforcementLearning as ql
 
 # mode Sarsa or Qlearning
-Sarsa = True
+Sarsa = False
 
 root = Tk()
 # every 8px is a unit
@@ -39,7 +39,7 @@ closest_car_position_of_road_22 = 9
 # road1 light setting, 0:green, 1:red
 light_setting = 0
 amber_light = 0
-light_delay = 0
+light_delay = 3
 # base case change time
 base_case = 10
 # a list that store the postions that have been occupied
