@@ -4,7 +4,7 @@ import os.path
 
 
 class RL(object):
-    def __init__(self, action_space, alpha=0.1, gamma=0.9, e_greedy=0.96):
+    def __init__(self, action_space, alpha=0.1, gamma=0.9, e_greedy=0.9):
         self.actions = action_space  # Two actions: decide to switch or not.
         self.alpha = alpha    # Use learning rate: alpha = .1
         self.gamma = gamma   # Use discount factor: gamma = .9
