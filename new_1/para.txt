@@ -1,0 +1,118 @@
+part 1: ql vs sarsa
+
+ql:
+reward: -1 each road
+Discount factor: gamma = 0.9
+Learning rate: alpha = 0.1
+Epsilon-greedy exploration 10%
+Generate cars: time % (rnd.randint(1, 10) + 5) == 0 and the prob of generating cars on each road is fair(25%, 25%, 25%, 25%)
+
+sarsa:
+reward: -1 each road
+Discount factor: gamma = 0.9
+Learning rate: alpha = 0.1
+Epsilon-greedy exploration 10%
+Generate cars: time % (rnd.randint(1, 10) + 5) == 0 and the prob of generating cars on each road is fair(25%, 25%, 25%, 25%)
+
+
+sa win, use sa for next part
+
+
+part 2: sarsa vs sarsa1
+
+sarsa:
+reward: -1 each road
+Discount factor: gamma = 0.9
+Learning rate: alpha = 0.1
+Epsilon-greedy exploration 10%
+Generate cars: time % (rnd.randint(1, 10) + 5) == 0 and the prob of generating cars on each road is fair(25%, 25%, 25%, 25%)
+
+sarsa1:
+reward: -1 every grid
+Discount factor: gamma = 0.9
+Learning rate: alpha = 0.1
+Epsilon-greedy exploration 10%
+Generate cars: time % (rnd.randint(1, 10) + 5) == 0 and the prob of generating cars on each road is fair(25%, 25%, 25%, 25%)
+
+
+almost same, car intense too small, so we add more car in next part
+
+
+part 3: sarsa1 vs sarsa2 ; sarsa vs sarsa3
+
+sarsa1:
+reward: -1 every grid
+Discount factor: gamma = 0.9
+Learning rate: alpha = 0.1
+Epsilon-greedy exploration 10%
+Generate cars: time % (rnd.randint(1, 10) + 5) == 0 and the prob of generating cars on each road is fair(25%, 25%, 25%, 25%)
+
+sarsa2:
+reward: -1 every grid
+Discount factor: gamma = 0.9
+Learning rate: alpha = 0.1
+Epsilon-greedy exploration 10%
+Generate cars: time % (rnd.randint(1, 5) + 5) == 0 and the prob of generating cars on each road is fair(25%, 25%, 25%, 25%)
+
+
+sarsa:
+reward: -1 each road
+Discount factor: gamma = 0.9
+Learning rate: alpha = 0.1
+Epsilon-greedy exploration 10%
+Generate cars: time % (rnd.randint(1, 10) + 5) == 0 and the prob of generating cars on each road is fair(25%, 25%, 25%, 25%)
+
+
+sarsa3:
+reward: -1 each road
+Discount factor: gamma = 0.9
+Learning rate: alpha = 0.1
+Epsilon-greedy exploration 10%
+Generate cars: time % (rnd.randint(1, 5) + 5) == 0 and the prob of generating cars on each road is fair(25%, 25%, 25%, 25%)
+
+
+diff between car intense up, but diff between reward same.
+
+
+
+part 4: diff Rl
+
+base sarsa:
+reward: -1 each road
+Discount factor: gamma = 0.9
+Learning rate: alpha = 0.1
+Epsilon-greedy exploration 10%
+Generate cars: time % (rnd.randint(1, 10) + 5) == 0 and the prob of generating cars on each road is fair(25%, 25%, 25%, 25%)
+
+
+diff alpha: sarsa vs alp1 vs alp2 vs alp3
+para1:
+Learning rate: alpha = 0.01
+
+para2:
+Learning rate: alpha = 0.05
+
+para3:
+Learning rate: alpha = 0.2
+
+
+diff gamma: sarsa vs gam1 vs gam2 vs gam3
+para4:
+gamma = 0.8
+
+para5:
+gamma = 0.95
+
+para6:
+gamma = 0.99
+
+diff egreedy: sarsa vs eg1 vs eg2 vs eg3
+para7:
+egreedy = 1%
+
+para8:
+egreedy = 5%
+
+para9:
+egreedy = 20%
+

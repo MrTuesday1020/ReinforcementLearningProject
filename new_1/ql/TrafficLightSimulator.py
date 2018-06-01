@@ -256,10 +256,8 @@ def move_up(road,block_list,loc):
 
 ########################################### main loop ###########################################
 
-amount_of_training = 10
+amount_of_training = 100
 current_training = 0
-
-now_time = 0
 
 # do 50 training
 while current_training < amount_of_training:
@@ -302,13 +300,11 @@ while current_training < amount_of_training:
 					
 			if light_delay == 10:
 				action = 'switch'
+				
+	
 			
 			if action == 'switch':
 				light_delay = -1
-#				block_list_11 = [49*unit]
-#				block_list_12 = [50*unit]
-#				block_list_21 = [49*unit]
-#				block_list_22 = [50*unit]
 				if light_setting == 0:	# road1: green -> yellow; road2: red -> red
 					light_setting = 1
 					amber_light = 1
@@ -378,12 +374,24 @@ while current_training < amount_of_training:
 			
 			root.update()
 			
+
+
 			
 			# Reward: -1.0 if a car is stopped at a red light on either road (Including the case that the light delay is less than 3 time step), 0 otherwise.
-			if len(block_list_11) > 1 or len(block_list_12) > 1 or len(block_list_21) > 1 or len(block_list_22) > 1:
-				reward = -1
-			else:
-				reward = 0
+#			if len(block_list_11) > 1 or len(block_list_12) > 1 or len(block_list_21) > 1 or len(block_list_22) > 1:
+#				reward = -1
+#			else:
+#				reward = 0
+			
+			reward = 0
+			if len(block_list_11) > 1:
+				reward -= 1
+			if len(block_list_12) > 1:
+				reward -= 1
+			if len(block_list_21) > 1:
+				reward -= 1
+			if len(block_list_22) > 1:
+				reward -= 1
 			
 			# Reward: -1.0 if a car is stopped at a red light on either road (Excluding the case that the light delay is less than 3 time step), 0 otherwise.
 #			if len(block_list_11) > 1 or len(block_list_12) > 1 or len(block_list_21) > 1 or len(block_list_22) > 1:
@@ -398,23 +406,6 @@ while current_training < amount_of_training:
 #			reward = - (len(block_list_11) + len(block_list_12) + len(block_list_21) + len(block_list_22) - 4)
 #			print(observation,action,reward,observation_,light_setting)
 			
-			# chaneg light setting
-			if amber_light != 0:
-				if amber_light == 1:	# road1: yellow -> red; road2: red -> green
-					canvas.itemconfig(light_11, fill='red2')
-					canvas.itemconfig(light_12, fill='red2')
-					canvas.itemconfig(light_21, fill='SpringGreen3')
-					canvas.itemconfig(light_22, fill='SpringGreen3')
-				else:	# road2: yellow -> red; road1: red -> green
-					canvas.itemconfig(light_21, fill='red2')
-					canvas.itemconfig(light_22, fill='red2')
-					canvas.itemconfig(light_11, fill='SpringGreen3')
-					canvas.itemconfig(light_12, fill='SpringGreen3')
-				block_list_11 = [49*unit]
-				block_list_12 = [50*unit]
-				block_list_21 = [49*unit]
-				block_list_22 = [50*unit]
-				amber_light = 0
 				
 			if Sarsa:
 				if light_delay <= 2:
@@ -425,16 +416,10 @@ while current_training < amount_of_training:
 			
 			# learning
 			if Sarsa:
-				if light_delay <= 2:
-					RL.learn(str(observation), 'switch', reward, str(observation_), action_)
-				else:
-					RL.learn(str(observation), action, reward, str(observation_), action_)
+				RL.learn(str(observation), action, reward, str(observation_), action_)
 			else:
-				if light_delay <= 2:
-					RL.learn(str(observation), 'switch', reward, str(observation_))
-				else:
-					RL.learn(str(observation), action, reward, str(observation_))
-			
+				RL.learn(str(observation), action, reward, str(observation_))
+
 			# observation
 			observation = observation_
 			if Sarsa:
@@ -443,15 +428,32 @@ while current_training < amount_of_training:
 			# compute the amount of stop cars
 			stop_cars = len(block_list_11) + len(block_list_12) + len(block_list_21) + len(block_list_22) - 4
 			sum_of_stop_cars += stop_cars
+
+			if amber_light != 0:
+				if amber_light == 1:	# road1: yellow -> red; road2: red -> green
+					canvas.itemconfig(light_11, fill='red2')
+					canvas.itemconfig(light_12, fill='red2')
+					canvas.itemconfig(light_21, fill='SpringGreen3')
+					canvas.itemconfig(light_22, fill='SpringGreen3')
+					block_list_21 = [49*unit]
+					block_list_22 = [50*unit]
+				else:	# road2: yellow -> red; road1: red -> green
+					canvas.itemconfig(light_21, fill='red2')
+					canvas.itemconfig(light_22, fill='red2')
+					canvas.itemconfig(light_11, fill='SpringGreen3')
+					canvas.itemconfig(light_12, fill='SpringGreen3')
+					block_list_11 = [49*unit]
+					block_list_12 = [50*unit]
+				amber_light = 0
 			
 			light_delay += 1
 			current_time += 1
 			
-			
+		#	time.sleep(0.5)	
 #		print(sum_of_stop_cars)
 		performance_measure.append(sum_of_stop_cars)
 		current_episode += 1
-
+		
 
 	print(performance_measure)
 	performance_file = 'data/performance_' + str(current_training)
