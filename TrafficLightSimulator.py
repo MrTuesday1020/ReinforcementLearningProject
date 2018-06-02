@@ -89,7 +89,7 @@ def next_car_left(road,loc):
 	for car in road:
 		px1 = canvas.coords(car[1])[0]
 		if px1 < loc*unit:
-			closest_car_position_of_road = int((loc*unit - px1) / unit)
+			closest_car_position_of_road = int((loc*unit - px1) / unit) - 1
 			temp = road.index(car)
 			if temp != len(road) - 1:
 				px2 = canvas.coords(road[temp+1][1])[0]
@@ -103,7 +103,7 @@ def next_car_right(road,loc):
 	for car in road:
 		px1 = canvas.coords(car[1])[0]
 		if px1 > loc*unit:
-			closest_car_position_of_road = int((px1 - loc*unit) / unit)
+			closest_car_position_of_road = int((px1 - loc*unit) / unit) - 1
 			temp = road.index(car)
 			if temp != len(road) - 1:
 				px2 = canvas.coords(road[temp+1][1])[0]
@@ -117,7 +117,7 @@ def next_car_down(road,loc):
 	for car in road:
 		px1 = canvas.coords(car[1])[1]
 		if px1 < loc*unit:
-			closest_car_position_of_road = int((loc*unit - px1) / unit)
+			closest_car_position_of_road = int((loc*unit - px1) / unit) - 1
 			temp = road.index(car)
 			if temp != len(road) - 1:
 				px2 = canvas.coords(road[temp+1][1])[1]
@@ -131,7 +131,7 @@ def next_car_up(road,loc):
 	for car in road:
 		px1 = canvas.coords(car[1])[1]
 		if px1 > loc*unit:
-			closest_car_position_of_road = int((px1 - loc*unit) / unit)
+			closest_car_position_of_road = int((px1 - loc*unit) / unit) - 1
 			temp = road.index(car)
 			if temp != len(road) - 1:
 				px2 = canvas.coords(road[temp+1][1])[1]
@@ -254,8 +254,10 @@ while current_training < amount_of_training:
 
 		# every 1000 time step as a unit
 		while current_time <= period_of_time:
+			print('----------------------------------------------------')
+			print(block_list_11, block_list_12, block_list_21, block_list_22)
 			
-			# delete cars which have move outside the canvas
+			# delete cars which have moved outside the canvas
 			road_11 = [car for car in road_11 if canvas.coords(car[1])[0] <= 100*unit]
 			road_12 = [car for car in road_12 if canvas.coords(car[1])[0] >= 0*unit]
 			road_21 = [car for car in road_21 if canvas.coords(car[1])[1] <= 100*unit]
@@ -272,7 +274,7 @@ while current_training < amount_of_training:
 			if light_delay == 10:
 				action = 'switch'
 			
-			# chaneg light setting
+			# change light setting
 			if amber_light != 0:
 				if amber_light == 1:	# road1: yellow -> red; road2: red -> green
 					canvas.itemconfig(light_11, fill='red2')
@@ -288,10 +290,11 @@ while current_training < amount_of_training:
 			
 			if action == 'switch':
 				light_delay = -1
-				block_list_11 = [49*unit]
-				block_list_12 = [50*unit]
-				block_list_21 = [49*unit]
-				block_list_22 = [50*unit]
+#				print('clear!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+#				block_list_11 = [49*unit]
+#				block_list_12 = [50*unit]
+#				block_list_21 = [49*unit]
+#				block_list_22 = [50*unit]
 				if light_setting == 0:	# road1: green -> yellow; road2: red -> red
 					light_setting = 1
 					amber_light = 1
@@ -358,14 +361,24 @@ while current_training < amount_of_training:
 			
 			root.update()
 			
+			
+			if action == 'switch':
+				light_delay = -1
+				print('clear!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+				block_list_11 = [49*unit]
+				block_list_12 = [50*unit]
+				block_list_21 = [49*unit]
+				block_list_22 = [50*unit]
+				print(block_list_11, block_list_12, block_list_21, block_list_22)
+			
 			# next state
 			observation_ = update_state(action, observation, road_11, road_21, road_12, road_22)
 			
 			# Reward: -1.0 if a car is stopped at a red light on either road (Including the case that the light delay is less than 3 time step), 0 otherwise.
-			if len(block_list_11) > 1 or len(block_list_12) > 1 or len(block_list_21) > 1 or len(block_list_22) > 1:
-				reward = -1
-			else:
-				reward = 0
+#			if len(block_list_11) > 1 or len(block_list_12) > 1 or len(block_list_21) > 1 or len(block_list_22) > 1:
+#				reward = -1
+#			else:
+#				reward = 0
 			
 			# Reward: -1.0 if a car is stopped at a red light on either road (Excluding the case that the light delay is less than 3 time step), 0 otherwise.
 #			if len(block_list_11) > 1 or len(block_list_12) > 1 or len(block_list_21) > 1 or len(block_list_22) > 1:
@@ -377,7 +390,8 @@ while current_training < amount_of_training:
 #				reward = 0
 
 			# Reward: every step, every grid, a car stops, reward minus 1.
-#			reward = - (len(block_list_11) + len(block_list_12) + len(block_list_21) + len(block_list_22) - 4)
+			reward = - (len(block_list_11) + len(block_list_12) + len(block_list_21) + len(block_list_22) - 4)
+			#print(observation, reward)
 				
 			if Sarsa:
 				if light_delay <= 2:
@@ -403,6 +417,8 @@ while current_training < amount_of_training:
 			
 			light_delay += 1
 			current_time += 1
+			
+			time.sleep(0.8)
 			
 #		print(sum_of_stop_cars)
 		performance_measure.append(sum_of_stop_cars)
