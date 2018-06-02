@@ -24,8 +24,6 @@ class RL(object):
 
     def choose_action(self, observation):
         exist = self.check_state_exist(observation)
-        if not exist:
-            return 'no_switch'
         # Epsilon-greedy choice
         if np.random.rand() < self.epsilon:
             # choose best action

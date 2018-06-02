@@ -4,7 +4,7 @@ import random as rnd
 import ReinforcementLearning as ql
 
 # mode Sarsa or Qlearning
-Sarsa = True
+Sarsa = False
 
 root = Tk()
 # every 8px is a unit
@@ -72,12 +72,30 @@ def closest_car(car_position, action, light_setting, clst_car_position_of_road, 
 		if next_car_position > 9:
 			next_car_position = 10
 		if action == 'switch':
-			if light_setting == 1:	# red -> green
-				car_position = next_car_position - 1
-			else:	# green -> red
-				car_position = car_position
+			car_position = car_position
 		else:
 			if light_setting == 1:	# red -> red
+				car_position = car_position
+			else:	# green -> green
+				car_position = next_car_position - 1
+	return car_position
+	
+	
+def closest_car_2(car_position, action, light_setting, clst_car_position_of_road, next_car_position):
+	if car_position == 9:
+		if clst_car_position_of_road > 9:	# 9 -> 9
+			car_position = car_position
+		elif clst_car_position_of_road == 9:	# 9 -> 8
+			car_position -= 1
+	elif car_position > 0:
+		car_position -= 1
+	elif car_position == 0:
+		if next_car_position > 9:
+			next_car_position = 10
+		if action == 'switch':
+			car_position = car_position
+		else:
+			if light_setting == 0:	# red -> red
 				car_position = car_position
 			else:	# green -> green
 				car_position = next_car_position - 1
@@ -90,10 +108,11 @@ def next_car_left(road,loc):
 		px1 = canvas.coords(car[1])[0]
 		if px1 < loc*unit:
 			closest_car_position_of_road = int((loc*unit - px1) / unit) - 1
+
 			temp = road.index(car)
 			if temp != len(road) - 1:
 				px2 = canvas.coords(road[temp+1][1])[0]
-				next_car_position = int((loc*unit - px2) / unit)
+				next_car_position = int((loc*unit - px2) / unit)-1
 			break
 	return closest_car_position_of_road,next_car_position
 	
@@ -107,7 +126,7 @@ def next_car_right(road,loc):
 			temp = road.index(car)
 			if temp != len(road) - 1:
 				px2 = canvas.coords(road[temp+1][1])[0]
-				next_car_position = int((px2 - loc*unit) / unit)
+				next_car_position = int((px2 - loc*unit) / unit)-1
 			break
 	return closest_car_position_of_road,next_car_position
 	
@@ -117,11 +136,13 @@ def next_car_down(road,loc):
 	for car in road:
 		px1 = canvas.coords(car[1])[1]
 		if px1 < loc*unit:
-			closest_car_position_of_road = int((loc*unit - px1) / unit) - 1
+
+			closest_car_position_of_road = int((loc*unit - px1) / unit)-1
+
 			temp = road.index(car)
 			if temp != len(road) - 1:
 				px2 = canvas.coords(road[temp+1][1])[1]
-				next_car_position = int((loc*unit - px2) / unit)
+				next_car_position = int((loc*unit - px2) / unit)-1
 			break
 	return closest_car_position_of_road,next_car_position
 	
@@ -135,23 +156,34 @@ def next_car_up(road,loc):
 			temp = road.index(car)
 			if temp != len(road) - 1:
 				px2 = canvas.coords(road[temp+1][1])[1]
-				next_car_position = int((px2 - loc*unit) / unit)
+				next_car_position = int((px2 - loc*unit) / unit)-1
 			break
 	return closest_car_position_of_road,next_car_position
 	
 def update_state(action, observation, road_11, road_21, road_12, road_22):
 	closest_car_position_of_road_11,next_car_position_11 = next_car_left(road_11,49)
 	closest_car_position_of_road_12,next_car_position_12 = next_car_right(road_12,50)
+	
+	next_car_position = [closest_car_position_of_road_11,closest_car_position_of_road_12,next_car_position_11,next_car_position_12]
+	clost = sorted(next_car_position)
+	closest_car_position_of_road1 = clost.pop(0)
+	next_car_position1 = clost.pop(0)
+	if next_car_position1 == closest_car_position_of_road1:
+		next_car_position1 = clost.pop(0)
+		
+	
 	closest_car_position_of_road_21,next_car_position_21 = next_car_down(road_21,49)
 	closest_car_position_of_road_22,next_car_position_22 = next_car_up(road_22,50)
 
-	closest_car_position_of_road1 = min(closest_car_position_of_road_11,closest_car_position_of_road_12)
-	next_car_position1 = min(next_car_position_11,next_car_position_12)
-	closest_car_position_of_road2 = min(closest_car_position_of_road_21,closest_car_position_of_road_22)
-	next_car_position2 = min(next_car_position_21,next_car_position_22)
+	next_car_position = [closest_car_position_of_road_21,closest_car_position_of_road_22,next_car_position_21,next_car_position_22]
+	clost = sorted(next_car_position)
+	closest_car_position_of_road2 = clost.pop(0)
+	next_car_position2 = clost.pop(0)
+	if next_car_position2 == closest_car_position_of_road2:
+		next_car_position2 = clost.pop(0)
 
 	closest_car_position_of_road1 = closest_car(observation[0], action, observation[2], closest_car_position_of_road1, next_car_position1)
-	closest_car_position_of_road2 = closest_car(observation[1], action, observation[2], closest_car_position_of_road2, next_car_position2)
+	closest_car_position_of_road2 = closest_car_2(observation[1], action, observation[2], closest_car_position_of_road2, next_car_position2)
  	
 	if action == 'switch':
 		if observation[2] == 0:
@@ -227,8 +259,10 @@ def move_up(road,block_list,loc):
 
 ########################################### main loop ###########################################
 
-amount_of_training = 100
+amount_of_training = 10
 current_training = 0
+
+now_time = 0
 
 # do 50 training
 while current_training < amount_of_training:
@@ -274,23 +308,9 @@ while current_training < amount_of_training:
 			if light_delay == 10:
 				action = 'switch'
 			
-			# change light setting
-			if amber_light != 0:
-				if amber_light == 1:	# road1: yellow -> red; road2: red -> green
-					canvas.itemconfig(light_11, fill='red2')
-					canvas.itemconfig(light_12, fill='red2')
-					canvas.itemconfig(light_21, fill='SpringGreen3')
-					canvas.itemconfig(light_22, fill='SpringGreen3')
-				else:	# road2: yellow -> red; road1: red -> green
-					canvas.itemconfig(light_21, fill='red2')
-					canvas.itemconfig(light_22, fill='red2')
-					canvas.itemconfig(light_11, fill='SpringGreen3')
-					canvas.itemconfig(light_12, fill='SpringGreen3')
-				amber_light = 0
-			
+
 			if action == 'switch':
 				light_delay = -1
-#				print('clear!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
 #				block_list_11 = [49*unit]
 #				block_list_12 = [50*unit]
 #				block_list_21 = [49*unit]
@@ -305,6 +325,9 @@ while current_training < amount_of_training:
 					amber_light = 2
 					canvas.itemconfig(light_21, fill='yellow')
 					canvas.itemconfig(light_22, fill='yellow')
+					
+			# next state
+			observation_ = update_state(action, observation, road_11, road_21, road_12, road_22)
 
 			# car move
 			if light_setting == 0:
@@ -361,19 +384,6 @@ while current_training < amount_of_training:
 			
 			root.update()
 			
-			
-			if action == 'switch':
-				light_delay = -1
-				print('clear!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-				block_list_11 = [49*unit]
-				block_list_12 = [50*unit]
-				block_list_21 = [49*unit]
-				block_list_22 = [50*unit]
-				print(block_list_11, block_list_12, block_list_21, block_list_22)
-			
-			# next state
-			observation_ = update_state(action, observation, road_11, road_21, road_12, road_22)
-			
 			# Reward: -1.0 if a car is stopped at a red light on either road (Including the case that the light delay is less than 3 time step), 0 otherwise.
 #			if len(block_list_11) > 1 or len(block_list_12) > 1 or len(block_list_21) > 1 or len(block_list_22) > 1:
 #				reward = -1
@@ -390,9 +400,26 @@ while current_training < amount_of_training:
 #				reward = 0
 
 			# Reward: every step, every grid, a car stops, reward minus 1.
-			reward = - (len(block_list_11) + len(block_list_12) + len(block_list_21) + len(block_list_22) - 4)
-			#print(observation, reward)
-				
+#			reward = - (len(block_list_11) + len(block_list_12) + len(block_list_21) + len(block_list_22) - 4)
+#			print(observation,action,reward,observation_,light_setting)
+			
+			# chaneg light setting
+			if amber_light != 0:
+				if amber_light == 1:	# road1: yellow -> red; road2: red -> green
+					canvas.itemconfig(light_11, fill='red2')
+					canvas.itemconfig(light_12, fill='red2')
+					canvas.itemconfig(light_21, fill='SpringGreen3')
+					canvas.itemconfig(light_22, fill='SpringGreen3')
+				else:	# road2: yellow -> red; road1: red -> green
+					canvas.itemconfig(light_21, fill='red2')
+					canvas.itemconfig(light_22, fill='red2')
+					canvas.itemconfig(light_11, fill='SpringGreen3')
+					canvas.itemconfig(light_12, fill='SpringGreen3')
+				block_list_11 = [49*unit]
+				block_list_12 = [50*unit]
+				block_list_21 = [49*unit]
+				block_list_22 = [50*unit]
+				amber_light = 0				
 			if Sarsa:
 				if light_delay <= 2:
 					action_ = 'no_switch'
@@ -402,9 +429,15 @@ while current_training < amount_of_training:
 			
 			# learning
 			if Sarsa:
-				RL.learn(str(observation), action, reward, str(observation_), action_)
+				if light_delay <= 2:
+					RL.learn(str(observation), 'switch', reward, str(observation_), action_)
+				else:
+					RL.learn(str(observation), action, reward, str(observation_), action_)
 			else:
-				RL.learn(str(observation), action, reward, str(observation_))
+				if light_delay <= 2:
+					RL.learn(str(observation), 'switch', reward, str(observation_))
+				else:
+					RL.learn(str(observation), action, reward, str(observation_))
 			
 			# observation
 			observation = observation_
@@ -418,7 +451,6 @@ while current_training < amount_of_training:
 			light_delay += 1
 			current_time += 1
 			
-			time.sleep(0.8)
 			
 #		print(sum_of_stop_cars)
 		performance_measure.append(sum_of_stop_cars)

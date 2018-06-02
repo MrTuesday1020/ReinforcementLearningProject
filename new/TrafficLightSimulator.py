@@ -4,7 +4,7 @@ import random as rnd
 import ReinforcementLearning as ql
 
 # mode Sarsa or Qlearning
-Sarsa = True
+Sarsa = False
 
 root = Tk()
 # every 8px is a unit
@@ -39,7 +39,7 @@ closest_car_position_of_road_22 = 9
 # road1 light setting, 0:green, 1:red
 light_setting = 0
 amber_light = 0
-light_delay = 0
+light_delay = 3
 # base case change time
 base_case = 10
 # a list that store the postions that have been occupied
@@ -227,7 +227,7 @@ def move_up(road,block_list,loc):
 
 ########################################### main loop ###########################################
 
-amount_of_training = 100
+amount_of_training = 50
 current_training = 0
 
 # do 50 training
@@ -362,10 +362,10 @@ while current_training < amount_of_training:
 			observation_ = update_state(action, observation, road_11, road_21, road_12, road_22)
 			
 			# Reward: -1.0 if a car is stopped at a red light on either road (Including the case that the light delay is less than 3 time step), 0 otherwise.
-			if len(block_list_11) > 1 or len(block_list_12) > 1 or len(block_list_21) > 1 or len(block_list_22) > 1:
-				reward = -1
-			else:
-				reward = 0
+#			if len(block_list_11) > 1 or len(block_list_12) > 1 or len(block_list_21) > 1 or len(block_list_22) > 1:
+#				reward = -1
+#			else:
+#				reward = 0
 			
 			# Reward: -1.0 if a car is stopped at a red light on either road (Excluding the case that the light delay is less than 3 time step), 0 otherwise.
 #			if len(block_list_11) > 1 or len(block_list_12) > 1 or len(block_list_21) > 1 or len(block_list_22) > 1:
@@ -377,7 +377,7 @@ while current_training < amount_of_training:
 #				reward = 0
 
 			# Reward: every step, every grid, a car stops, reward minus 1.
-#			reward = - (len(block_list_11) + len(block_list_12) + len(block_list_21) + len(block_list_22) - 4)
+			reward = - (len(block_list_11) + len(block_list_12) + len(block_list_21) + len(block_list_22) - 4)
 				
 			if Sarsa:
 				if light_delay <= 2:
