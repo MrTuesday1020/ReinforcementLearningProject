@@ -15,4 +15,15 @@
 
 
 **2. ReinforcementLearning.py**
-In this python file, we have a class called RL(Reinforcement Learning) and two Reinforcement Learning algorithms inherit it: Q-learning and Sarsa.
+In this python file, we have a class called RL(Reinforcement Learning) and two Reinforcement Learning algorithms inherit it: Q-learning and Sarsa. Here are the function and paramater explainations:
+actions: a list contain 2 actions: decide to switch or not.
+alpha: learning rate
+gamma: discount factor
+epsilon: epsilon greedy exploration rate
+q_table: a table to store vlaues after each learning
+
+check_state_exist function: if the state is not in q_table, append the state into the table and return false, otherwise, retuen true.
+
+choose_action function: choose action according to the current state.
+
+learn function: learn according to the reward and state and uppdate q table.
