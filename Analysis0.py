@@ -20,7 +20,7 @@ for item in sorted(files):
 		
 	stop_cars = stop_cars[1:-1]
 	stop_cars = sorted([int(i) for i in stop_cars.split(', ')])
-	stop_cars = stop_cars[1:-1]
+	stop_cars = stop_cars[2:-2]
 #	stop_cars = stop_cars[5:-5]
 	
 	mean_stop_cars = np.mean(stop_cars)

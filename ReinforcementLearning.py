@@ -56,7 +56,7 @@ class QLearningTable(RL):
 # on-policy
 class SarsaTable(RL):
 
-    def __init__(self, actions=['switch', 'no_switch'], alpha=0.1, gamma=0.9, e_greedy=0.9):
+    def __init__(self, actions=['switch', 'no_switch'], alpha=0.1, gamma=0.9, e_greedy=0.01):
         super(SarsaTable, self).__init__(actions, alpha, gamma, e_greedy)
 
     def learn(self, s, a, r, s_, a_):

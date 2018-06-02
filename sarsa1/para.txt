@@ -1,6 +1,5 @@
-Sarsa
-
-Reward: -1.0 if a car is stopped at a red light on either road (Including the case that the light delay is less than 3 time step), 0 otherwise.
+sarsa
+reward: -1 every grid
 
 Discount factor: gamma = 0.9
 
@@ -8,4 +7,4 @@ Learning rate: alpha = 0.1
 
 Epsilon-greedy exploration 10%
 
-Generate cars: time % (rnd.randint(1, 10) + 5) == 0
+Generate cars: time % (rnd.randint(1, 10) + 5) == 0 and the prob of generating cars on each road is fair(25%, 25%, 25%, 25%)

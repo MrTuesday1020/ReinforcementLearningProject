@@ -1,9 +1,0 @@
-sarsa
-reward: -1 every grid
-Discount factor: gamma = 0.9
-
-Learning rate: alpha = 0.1
-
-Epsilon-greedy exploration 10%
-
-Generate cars: time % (rnd.randint(1, 5) + 5) == 0 and the prob of generating cars on each road is fair(25%, 25%, 25%, 25%)
